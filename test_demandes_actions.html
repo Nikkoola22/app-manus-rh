@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Actions Demandes</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        
+        .test-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .test-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+        }
+        
+        .test-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #333;
+        }
+        
+        .demande-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        
+        .demande-table th,
+        .demande-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .demande-table th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+        }
+        
+        .status-badge {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        
+        .status-en-attente {
+            background-color: #fef3c7;
+            color: #92400e;
+        }
+        
+        .status-approuvee {
+            background-color: #d1fae5;
+            color: #065f46;
+        }
+        
+        .status-refusee {
+            background-color: #fee2e2;
+            color: #991b1b;
+        }
+        
+        .action-button {
+            padding: 6px 12px;
+            margin: 2px;
+            border: 1px solid #d1d5db;
+            border-radius: 4px;
+            background-color: white;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        
+        .action-button:hover {
+            background-color: #f9fafb;
+        }
+        
+        .action-button.approuver {
+            background-color: #d1fae5;
+            color: #065f46;
+            border-color: #a7f3d0;
+        }
+        
+        .action-button.approuver:hover {
+            background-color: #a7f3d0;
+        }
+        
+        .action-button.refuser {
+            background-color: #fee2e2;
+            color: #991b1b;
+            border-color: #fca5a5;
+        }
+        
+        .action-button.refuser:hover {
+            background-color: #fca5a5;
+        }
+        
+        .action-button.voir {
+            background-color: #e0e7ff;
+            color: #3730a3;
+            border-color: #c7d2fe;
+        }
+        
+        .action-button.voir:hover {
+            background-color: #c7d2fe;
+        }
+        
+        .status-indicator {
+            font-size: 12px;
+            color: #6b7280;
+        }
+        
+        .instructions {
+            background-color: #f0f9ff;
+            padding: 15px;
+            border-radius: 6px;
+            border-left: 4px solid #3b82f6;
+        }
+        
+        .instructions h3 {
+            margin-top: 0;
+            color: #1e40af;
+        }
+        
+        .instructions ol {
+            margin-bottom: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>Test des Actions sur les Demandes de Congé</h1>
+        
+        <div class="instructions">
+            <h3>Instructions de Test</h3>
+            <ol>
+                <li><strong>Bouton "Voir" :</strong> Devrait afficher les détails de la demande (log dans la console)</li>
+                <li><strong>Bouton "Approuver" :</strong> Devrait approuver les demandes en attente</li>
+                <li><strong>Bouton "Refuser" :</strong> Devrait refuser les demandes en attente</li>
+                <li><strong>Demandes traitées :</strong> Devraient afficher un indicateur de statut</li>
+                <li><strong>Rechargement :</strong> Les données devraient se recharger après chaque action</li>
+            </ol>
+        </div>
+        
+        <div class="test-section">
+            <div class="test-title">Simulation des Demandes de Congé</div>
+            <table class="demande-table">
+                <thead>
+                    <tr>
+                        <th>Agent</th>
+                        <th>Type</th>
+                        <th>Période</th>
+                        <th>Statut</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Jean MARTIN</td>
+                        <td>CA</td>
+                        <td>15/01/2024 - 20/01/2024</td>
+                        <td><span class="status-badge status-en-attente">En attente</span></td>
+                        <td>
+                            <button class="action-button voir" onclick="testVoir(1)">Voir</button>
+                            <button class="action-button approuver" onclick="testApprouver(1)">Approuver</button>
+                            <button class="action-button refuser" onclick="testRefuser(1)">Refuser</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Marie DUPONT</td>
+                        <td>RTT</td>
+                        <td>22/01/2024 - 22/01/2024</td>
+                        <td><span class="status-badge status-en-attente">En attente</span></td>
+                        <td>
+                            <button class="action-button voir" onclick="testVoir(2)">Voir</button>
+                            <button class="action-button approuver" onclick="testApprouver(2)">Approuver</button>
+                            <button class="action-button refuser" onclick="testRefuser(2)">Refuser</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>SOFIANE BENDAOUD</td>
+                        <td>CA</td>
+                        <td>10/01/2024 - 15/01/2024</td>
+                        <td><span class="status-badge status-approuvee">Approuvée</span></td>
+                        <td>
+                            <button class="action-button voir" onclick="testVoir(3)">Voir</button>
+                            <span class="status-indicator">✅ Traitée</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Pierre BERNARD</td>
+                        <td>RTT</td>
+                        <td>05/01/2024 - 05/01/2024</td>
+                        <td><span class="status-badge status-refusee">Refusée</span></td>
+                        <td>
+                            <button class="action-button voir" onclick="testVoir(4)">Voir</button>
+                            <span class="status-indicator">❌ Refusée</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="test-section">
+            <div class="test-title">Logs de Test</div>
+            <div id="test-logs" style="background-color: #f8f9fa; padding: 15px; border-radius: 4px; font-family: monospace; font-size: 12px; max-height: 200px; overflow-y: auto;">
+                <div>Cliquez sur les boutons pour voir les logs ici...</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function log(message) {
+            const logsDiv = document.getElementById('test-logs');
+            const timestamp = new Date().toLocaleTimeString();
+            logsDiv.innerHTML += `<div>[${timestamp}] ${message}</div>`;
+            logsDiv.scrollTop = logsDiv.scrollHeight;
+        }
+
+        function testVoir(demandeId) {
+            log(`🔍 Voir demande ID: ${demandeId}`);
+            log(`   → Devrait ouvrir un dialog avec les détails de la demande`);
+        }
+
+        function testApprouver(demandeId) {
+            log(`✅ Approuver demande ID: ${demandeId}`);
+            log(`   → Envoi POST /api/demandes/${demandeId}/valider`);
+            log(`   → Action: approuver, Commentaires: Demande approuvée par l'admin`);
+            log(`   → Rechargement des données après succès`);
+            
+            // Simulation d'un délai
+            setTimeout(() => {
+                log(`   ✅ Demande ${demandeId} approuvée avec succès`);
+            }, 1000);
+        }
+
+        function testRefuser(demandeId) {
+            log(`❌ Refuser demande ID: ${demandeId}`);
+            log(`   → Envoi POST /api/demandes/${demandeId}/valider`);
+            log(`   → Action: refuser, Commentaires: Demande refusée par l'admin`);
+            log(`   → Rechargement des données après succès`);
+            
+            // Simulation d'un délai
+            setTimeout(() => {
+                log(`   ❌ Demande ${demandeId} refusée avec succès`);
+            }, 1000);
+        }
+
+        // Log initial
+        log('🚀 Test des actions sur les demandes de congé initialisé');
+        log('   → Vérifiez que les boutons fonctionnent dans l\'application réelle');
+    </script>
+</body>
+</html>
+

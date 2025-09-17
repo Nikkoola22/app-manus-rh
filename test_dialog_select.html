@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Dialog Select</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        
+        .test-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .test-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+        }
+        
+        .test-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #333;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: #555;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        
+        .form-select {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 4px;
+            font-size: 14px;
+            background-color: white;
+        }
+        
+        .form-button {
+            padding: 10px 20px;
+            background-color: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        .form-button:hover {
+            background-color: #2563eb;
+        }
+        
+        .form-button-outline {
+            padding: 10px 20px;
+            background-color: white;
+            color: #374151;
+            border: 1px solid #d1d5db;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-right: 10px;
+        }
+        
+        .form-button-outline:hover {
+            background-color: #f9fafb;
+        }
+        
+        .status {
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 10px;
+        }
+        
+        .status.success {
+            background-color: #d1fae5;
+            color: #065f46;
+            border: 1px solid #a7f3d0;
+        }
+        
+        .status.error {
+            background-color: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #fca5a5;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>Test des Menus Déroulants dans Dialog</h1>
+        
+        <div class="test-section">
+            <div class="test-title">Test 1: Menu déroulant simple</div>
+            <div class="form-group">
+                <label class="form-label" for="test-role">Rôle</label>
+                <select class="form-select" id="test-role">
+                    <option value="">Sélectionner un rôle</option>
+                    <option value="Agent">Agent</option>
+                    <option value="Responsable">Responsable</option>
+                    <option value="Admin">Admin</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="test-service">Service</label>
+                <select class="form-select" id="test-service">
+                    <option value="">Sélectionner un service</option>
+                    <option value="1">Ressources Humaines</option>
+                    <option value="2">Informatique</option>
+                    <option value="3">Comptabilité</option>
+                </select>
+            </div>
+            <button class="form-button" onclick="testSelects()">Tester la sélection</button>
+            <div id="test-result" class="status" style="display: none;"></div>
+        </div>
+        
+        <div class="test-section">
+            <div class="test-title">Test 2: Formulaire complet</div>
+            <form id="test-form">
+                <div class="form-group">
+                    <label class="form-label" for="test-prenom">Prénom</label>
+                    <input type="text" class="form-input" id="test-prenom" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="test-nom">Nom</label>
+                    <input type="text" class="form-input" id="test-nom" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="test-email">Email</label>
+                    <input type="email" class="form-input" id="test-email" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="test-role-form">Rôle</label>
+                    <select class="form-select" id="test-role-form" required>
+                        <option value="">Sélectionner un rôle</option>
+                        <option value="Agent">Agent</option>
+                        <option value="Responsable">Responsable</option>
+                        <option value="Admin">Admin</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="test-service-form">Service</label>
+                    <select class="form-select" id="test-service-form" required>
+                        <option value="">Sélectionner un service</option>
+                        <option value="1">Ressources Humaines</option>
+                        <option value="2">Informatique</option>
+                        <option value="3">Comptabilité</option>
+                    </select>
+                </div>
+                <button type="submit" class="form-button">Créer Agent</button>
+                <button type="button" class="form-button-outline" onclick="resetForm()">Réinitialiser</button>
+            </form>
+            <div id="form-result" class="status" style="display: none;"></div>
+        </div>
+        
+        <div class="test-section">
+            <div class="test-title">Instructions de Test</div>
+            <ol>
+                <li><strong>Testez les menus déroulants :</strong> Cliquez sur chaque menu déroulant et vérifiez que les options sont visibles et sélectionnables.</li>
+                <li><strong>Vérifiez la transparence :</strong> Les menus ne doivent pas être transparents ou difficiles à lire.</li>
+                <li><strong>Testez la sélection :</strong> Sélectionnez différentes options et vérifiez qu'elles s'affichent correctement.</li>
+                <li><strong>Testez le formulaire :</strong> Remplissez le formulaire complet et soumettez-le.</li>
+                <li><strong>Comparez avec l'application :</strong> Les menus dans l'application doivent avoir le même comportement.</li>
+            </ol>
+        </div>
+    </div>
+
+    <script>
+        function testSelects() {
+            const role = document.getElementById('test-role').value;
+            const service = document.getElementById('test-service').value;
+            const result = document.getElementById('test-result');
+            
+            if (role && service) {
+                result.className = 'status success';
+                result.innerHTML = `✅ Test réussi ! Rôle: ${role}, Service: ${service}`;
+                result.style.display = 'block';
+            } else {
+                result.className = 'status error';
+                result.innerHTML = '❌ Veuillez sélectionner un rôle et un service';
+                result.style.display = 'block';
+            }
+        }
+        
+        function resetForm() {
+            document.getElementById('test-form').reset();
+            document.getElementById('form-result').style.display = 'none';
+        }
+        
+        document.getElementById('test-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const result = document.getElementById('form-result');
+            const formData = new FormData(this);
+            
+            result.className = 'status success';
+            result.innerHTML = '✅ Formulaire soumis avec succès !<br>' +
+                `Prénom: ${formData.get('test-prenom') || document.getElementById('test-prenom').value}<br>` +
+                `Nom: ${formData.get('test-nom') || document.getElementById('test-nom').value}<br>` +
+                `Email: ${formData.get('test-email') || document.getElementById('test-email').value}<br>` +
+                `Rôle: ${document.getElementById('test-role-form').value}<br>` +
+                `Service: ${document.getElementById('test-service-form').value}`;
+            result.style.display = 'block';
+        });
+    </script>
+</body>
+</html>
+

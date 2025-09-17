@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test de Connexion</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .success { background-color: #d4edda; border-color: #c3e6cb; }
+        .error { background-color: #f8d7da; border-color: #f5c6cb; }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover { background-color: #0056b3; }
+        pre { background-color: #f8f9fa; padding: 10px; border-radius: 4px; overflow-x: auto; }
+    </style>
+</head>
+<body>
+    <h1>Test de Connexion - Application RH</h1>
+    
+    <div class="test-section">
+        <h2>Test de Connexion Backend</h2>
+        <button onclick="testBackend()">Tester le backend (port 5001)</button>
+        <div id="backend-result"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>Test de Connexion Frontend</h2>
+        <button onclick="testFrontend()">Tester le frontend (port 5173)</button>
+        <div id="frontend-result"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>Test de Login</h2>
+        <button onclick="testLogin()">Tester la connexion utilisateur</button>
+        <div id="login-result"></div>
+    </div>
+
+    <script>
+        async function testBackend() {
+            const resultDiv = document.getElementById('backend-result');
+            resultDiv.innerHTML = 'Test du backend en cours...';
+            
+            try {
+                const response = await fetch('http://localhost:5001/api/auth/check-session', {
+                    method: 'GET',
+                    credentials: 'include'
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    resultDiv.innerHTML = `
+                        <div class="success">
+                            <h3>✅ Backend fonctionne</h3>
+                            <p>Port 5001 accessible</p>
+                            <pre>${JSON.stringify(data, null, 2)}</pre>
+                        </div>
+                    `;
+                } else {
+                    throw new Error(`Erreur ${response.status}: ${response.statusText}`);
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="error">
+                        <h3>❌ Backend inaccessible</h3>
+                        <p>${error.message}</p>
+                        <p>Vérifiez que le serveur Flask est démarré sur le port 5001</p>
+                    </div>
+                `;
+            }
+        }
+        
+        async function testFrontend() {
+            const resultDiv = document.getElementById('frontend-result');
+            resultDiv.innerHTML = 'Test du frontend en cours...';
+            
+            try {
+                const response = await fetch('http://localhost:5173/', {
+                    method: 'GET'
+                });
+                
+                if (response.ok) {
+                    resultDiv.innerHTML = `
+                        <div class="success">
+                            <h3>✅ Frontend fonctionne</h3>
+                            <p>Port 5173 accessible</p>
+                            <p>Status: ${response.status}</p>
+                        </div>
+                    `;
+                } else {
+                    throw new Error(`Erreur ${response.status}: ${response.statusText}`);
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="error">
+                        <h3>❌ Frontend inaccessible</h3>
+                        <p>${error.message}</p>
+                        <p>Vérifiez que le serveur Vite est démarré sur le port 5173</p>
+                    </div>
+                `;
+            }
+        }
+        
+        async function testLogin() {
+            const resultDiv = document.getElementById('login-result');
+            resultDiv.innerHTML = 'Test de connexion en cours...';
+            
+            try {
+                const response = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    credentials: 'include',
+                    body: JSON.stringify({
+                        email: 'admin@exemple.com',
+                        password: 'admin123'
+                    })
+                });
+                
+                if (response.ok) {
+                    const user = await response.json();
+                    resultDiv.innerHTML = `
+                        <div class="success">
+                            <h3>✅ Connexion réussie</h3>
+                            <p>Connecté en tant que: ${user.prenom} ${user.nom} (${user.role})</p>
+                            <p>Quotité de travail: ${user.quotite_travail}h/semaine</p>
+                            <p>Date d'arrivée: ${new Date(user.date_debut_contrat).toLocaleDateString('fr-FR')}</p>
+                        </div>
+                    `;
+                } else {
+                    const error = await response.json();
+                    throw new Error(error.error || 'Erreur de connexion');
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="error">
+                        <h3>❌ Erreur de connexion</h3>
+                        <p>${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+    </script>
+</body>
+</html>

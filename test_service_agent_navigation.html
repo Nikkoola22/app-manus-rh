@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Navigation Agent depuis Service</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        
+        .test-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .test-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+        }
+        
+        .test-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #333;
+        }
+        
+        .service-detail {
+            background-color: #f0f9ff;
+            padding: 20px;
+            border-radius: 6px;
+            border-left: 4px solid #0288d1;
+            margin: 20px 0;
+        }
+        
+        .service-detail h2 {
+            margin-top: 0;
+            color: #0288d1;
+        }
+        
+        .agents-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        .agents-table th,
+        .agents-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .agents-table th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+        }
+        
+        .view-button {
+            padding: 6px 12px;
+            background-color: #6b7280;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .view-button:hover {
+            background-color: #4b5563;
+        }
+        
+        .view-button.working {
+            background-color: #22c55e;
+        }
+        
+        .view-button.working:hover {
+            background-color: #16a34a;
+        }
+        
+        .badge {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        
+        .badge-outline {
+            background-color: #f3f4f6;
+            color: #374151;
+            border: 1px solid #d1d5db;
+        }
+        
+        .instructions {
+            background-color: #fef3c7;
+            padding: 15px;
+            border-radius: 6px;
+            border-left: 4px solid #f59e0b;
+        }
+        
+        .test-results {
+            background-color: #f0fdf4;
+            padding: 15px;
+            border-radius: 6px;
+            border-left: 4px solid #22c55e;
+            margin: 15px 0;
+        }
+        
+        .test-results h4 {
+            margin-top: 0;
+            color: #166534;
+        }
+        
+        .checklist {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .checklist li {
+            padding: 5px 0;
+            display: flex;
+            align-items: center;
+        }
+        
+        .checklist li::before {
+            content: "✅";
+            margin-right: 10px;
+        }
+        
+        .checklist li.fixed::before {
+            content: "🔧";
+        }
+        
+        .demo-section {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 6px;
+            margin: 20px 0;
+        }
+        
+        .demo-title {
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #333;
+        }
+        
+        .navigation-flow {
+            background-color: #e0f2fe;
+            padding: 15px;
+            border-radius: 6px;
+            border-left: 4px solid #0288d1;
+            margin: 15px 0;
+        }
+        
+        .navigation-step {
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+            padding: 10px;
+            background-color: white;
+            border-radius: 4px;
+            border: 1px solid #e5e7eb;
+        }
+        
+        .step-number {
+            background-color: #3b82f6;
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 15px;
+        }
+        
+        .step-content {
+            flex: 1;
+        }
+        
+        .step-action {
+            font-weight: 600;
+            color: #1f2937;
+        }
+        
+        .step-result {
+            color: #6b7280;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>Test Navigation Agent depuis Service</h1>
+        
+        <div class="instructions">
+            <h3>Instructions de Test</h3>
+            <ol>
+                <li><strong>Aller dans Services :</strong> Onglet Services du dashboard admin</li>
+                <li><strong>Cliquer sur "Gérer" :</strong> Pour un service avec des agents</li>
+                <li><strong>Voir la liste des agents :</strong> Dans la vue détaillée du service</li>
+                <li><strong>Cliquer sur "Voir" :</strong> Pour un agent dans la liste</li>
+                <li><strong>Vérifier la navigation :</strong> Doit aller à la fiche de l'agent</li>
+            </ol>
+        </div>
+        
+        <div class="test-section">
+            <div class="test-title">Simulation de la Navigation</div>
+            
+            <div class="navigation-flow">
+                <h4>Flux de Navigation</h4>
+                
+                <div class="navigation-step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <div class="step-action">Dashboard Admin → Onglet "Services"</div>
+                        <div class="step-result">Liste des services avec bouton "Gérer"</div>
+                    </div>
+                </div>
+                
+                <div class="navigation-step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <div class="step-action">Cliquer sur "Gérer" pour un service</div>
+                        <div class="step-result">Vue détaillée du service avec responsable et agents</div>
+                    </div>
+                </div>
+                
+                <div class="navigation-step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <div class="step-action">Cliquer sur "Voir" pour un agent</div>
+                        <div class="step-result">Navigation vers la fiche de l'agent</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <div class="test-title">Simulation de la Vue Détaillée du Service</div>
+            
+            <div class="service-detail">
+                <h2>Ressources Humaines - Gestion du service</h2>
+                
+                <div class="demo-section">
+                    <div class="demo-title">Liste des Agents du Service</div>
+                    <table class="agents-table">
+                        <thead>
+                            <tr>
+                                <th>Nom</th>
+                                <th>Email</th>
+                                <th>Rôle</th>
+                                <th>Quotité</th>
+                                <th>Date d'entrée</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Super ADMIN</td>
+                                <td>admin@exemple.com</td>
+                                <td><span class="badge badge-outline">Admin</span></td>
+                                <td>35h/semaine</td>
+                                <td>16/09/2024</td>
+                                <td>
+                                    <button class="view-button working" onclick="simulateViewAgent(1)">
+                                        👁️ Voir
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Agent38h TEST</td>
+                                <td>agent38h@test.com</td>
+                                <td><span class="badge badge-outline">Agent</span></td>
+                                <td>38h/semaine</td>
+                                <td>15/01/2024</td>
+                                <td>
+                                    <button class="view-button working" onclick="simulateViewAgent(9)">
+                                        👁️ Voir
+                                    </button>
+                                    </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <div class="test-title">Corrections Appliquées</div>
+            
+            <div class="test-results">
+                <h4>🔧 Problème Identifié</h4>
+                <ul class="checklist">
+                    <li class="fixed">Le bouton "Voir" dans ServiceDetailView n'utilisait pas onViewAgent</li>
+                    <li class="fixed">La fonction onViewAgent n'était pas passée au composant ServiceDetailView</li>
+                    <li class="fixed">Le bouton affichait seulement un console.log au lieu de naviguer</li>
+                </ul>
+            </div>
+            
+            <div class="test-results">
+                <h4>✅ Corrections Appliquées</h4>
+                <ul class="checklist">
+                    <li>Ajout de onViewAgent en paramètre du composant ServiceDetailView</li>
+                    <li>Passage de onViewAgent depuis AdminDashboardNative vers ServiceDetailView</li>
+                    <li>Modification du bouton "Voir" pour appeler onViewAgent(agent.id)</li>
+                    <li>Ajout de logs de debug pour tracer la navigation</li>
+                    <li>Vérification de l'existence de onViewAgent avant l'appel</li>
+                </ul>
+            </div>
+            
+            <div class="test-results">
+                <h4>🎯 Code Corrigé</h4>
+                <div class="demo-section">
+                    <h4>Avant (ne fonctionnait pas) :</h4>
+                    <pre><code>const ServiceDetailView = ({ service, agents, onBack }) => {
+  // ...
+  &lt;Button onClick={() => {
+    console.log('Voir agent:', agent.id)
+  }}&gt;
+    Voir
+  &lt;/Button&gt;</code></pre>
+                    
+                    <h4>Après (fonctionne) :</h4>
+                    <pre><code>const ServiceDetailView = ({ service, agents, onBack, onViewAgent }) => {
+  // ...
+  &lt;Button onClick={() => {
+    console.log('Voir agent depuis service:', agent.id)
+    if (onViewAgent) {
+      onViewAgent(agent.id)
+    }
+  }}&gt;
+    Voir
+  &lt;/Button&gt;</code></pre>
+                </div>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <div class="test-title">Test de Navigation</div>
+            
+            <div class="demo-section">
+                <div class="demo-title">Test Interactif</div>
+                <p>Cliquez sur les boutons "Voir" ci-dessus pour simuler la navigation vers les fiches agents :</p>
+                
+                <div id="navigation-log" style="background-color: #f3f4f6; padding: 15px; border-radius: 4px; margin-top: 15px; font-family: monospace; font-size: 14px;">
+                    <div>Logs de navigation :</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function simulateViewAgent(agentId) {
+            const logDiv = document.getElementById('navigation-log');
+            const timestamp = new Date().toLocaleTimeString();
+            
+            logDiv.innerHTML += `<div>[${timestamp}] Clic sur "Voir" pour l'agent ID: ${agentId}</div>`;
+            logDiv.innerHTML += `<div>[${timestamp}] Appel de onViewAgent(${agentId})</div>`;
+            logDiv.innerHTML += `<div>[${timestamp}] Navigation vers la fiche de l'agent</div>`;
+            logDiv.innerHTML += `<div>[${timestamp}] ✅ Navigation réussie !</div>`;
+            logDiv.innerHTML += `<div>---</div>`;
+            
+            // Faire défiler vers le bas
+            logDiv.scrollTop = logDiv.scrollHeight;
+            
+            console.log('Navigation vers agent:', agentId);
+        }
+    </script>
+</body>
+</html>
+

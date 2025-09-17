@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Navigation Agent</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        
+        .test-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .test-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+        }
+        
+        .test-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #333;
+        }
+        
+        .navigation-test {
+            display: flex;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .nav-button {
+            padding: 10px 20px;
+            background-color: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        
+        .nav-button:hover {
+            background-color: #2563eb;
+        }
+        
+        .nav-button.secondary {
+            background-color: #6b7280;
+        }
+        
+        .nav-button.secondary:hover {
+            background-color: #4b5563;
+        }
+        
+        .view-display {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 6px;
+            border-left: 4px solid #3b82f6;
+            margin: 20px 0;
+        }
+        
+        .agent-profile {
+            background-color: #f0fdf4;
+            padding: 20px;
+            border-radius: 6px;
+            border-left: 4px solid #22c55e;
+            margin: 20px 0;
+        }
+        
+        .agent-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 15px 0;
+        }
+        
+        .info-item {
+            background-color: white;
+            padding: 10px;
+            border-radius: 4px;
+            border: 1px solid #e5e7eb;
+        }
+        
+        .info-label {
+            font-weight: 600;
+            color: #374151;
+            font-size: 12px;
+            text-transform: uppercase;
+        }
+        
+        .info-value {
+            color: #111827;
+            margin-top: 4px;
+        }
+        
+        .back-button {
+            background-color: #ef4444;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        .back-button:hover {
+            background-color: #dc2626;
+        }
+        
+        .log-section {
+            background-color: #1f2937;
+            color: #f9fafb;
+            padding: 15px;
+            border-radius: 6px;
+            font-family: monospace;
+            font-size: 12px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .instructions {
+            background-color: #fef3c7;
+            padding: 15px;
+            border-radius: 6px;
+            border-left: 4px solid #f59e0b;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>Test de Navigation vers la Fiche Agent</h1>
+        
+        <div class="instructions">
+            <h3>Instructions de Test</h3>
+            <ol>
+                <li><strong>Dashboard Admin :</strong> Cliquez sur "Voir Agent" dans l'onglet Demandes</li>
+                <li><strong>Navigation :</strong> Devrait rediriger vers la fiche de l'agent</li>
+                <li><strong>Retour :</strong> Le bouton "Retour" devrait ramener au dashboard</li>
+                <li><strong>Fonction onViewAgent :</strong> Devrait être appelée avec l'ID de l'agent</li>
+            </ol>
+        </div>
+        
+        <div class="test-section">
+            <div class="test-title">Simulation du Dashboard Admin</div>
+            <div class="navigation-test">
+                <button class="nav-button" onclick="simulateViewAgent(2, 'Jean MARTIN')">
+                    Voir Agent - Jean MARTIN
+                </button>
+                <button class="nav-button" onclick="simulateViewAgent(3, 'Marie DUPONT')">
+                    Voir Agent - Marie DUPONT
+                </button>
+                <button class="nav-button" onclick="simulateViewAgent(4, 'SOFIANE BENDAOUD')">
+                    Voir Agent - SOFIANE BENDAOUD
+                </button>
+            </div>
+        </div>
+        
+        <div id="dashboard-view" class="view-display">
+            <h3>Dashboard Admin</h3>
+            <p>Onglet Demandes de Congé - Cliquez sur "Voir Agent" pour naviguer vers la fiche de l'agent.</p>
+        </div>
+        
+        <div id="agent-profile-view" class="agent-profile" style="display: none;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h3 id="agent-name">Fiche Agent</h3>
+                <button class="back-button" onclick="simulateBackToDashboard()">
+                    ← Retour au Dashboard
+                </button>
+            </div>
+            
+            <div class="agent-info">
+                <div class="info-item">
+                    <div class="info-label">Nom</div>
+                    <div class="info-value" id="agent-nom">-</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Email</div>
+                    <div class="info-value" id="agent-email">-</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Rôle</div>
+                    <div class="info-value" id="agent-role">-</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Service</div>
+                    <div class="info-value" id="agent-service">-</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Quotité</div>
+                    <div class="info-value" id="agent-quotite">-</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Date d'entrée</div>
+                    <div class="info-value" id="agent-date">-</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <div class="test-title">Logs de Navigation</div>
+            <div id="navigation-logs" class="log-section">
+                <div>Cliquez sur les boutons pour voir les logs de navigation...</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Données simulées des agents
+        const agentsData = {
+            2: {
+                nom: 'MARTIN',
+                prenom: 'Jean',
+                email: 'jean.martin@exemple.com',
+                role: 'Responsable',
+                service: 'Ressources Humaines',
+                quotite: '35h/semaine',
+                date_entree: '2020-01-15'
+            },
+            3: {
+                nom: 'DUPONT',
+                prenom: 'Marie',
+                email: 'marie.dupont@exemple.com',
+                role: 'Responsable',
+                service: 'Informatique',
+                quotite: '35h/semaine',
+                date_entree: '2019-03-10'
+            },
+            4: {
+                nom: 'BENDAOUD',
+                prenom: 'SOFIANE',
+                email: 'sofiane.bendaoud@exemple.com',
+                role: 'Agent',
+                service: 'Comptabilité',
+                quotite: '38h/semaine',
+                date_entree: '2021-09-01'
+            }
+        };
+
+        function log(message) {
+            const logsDiv = document.getElementById('navigation-logs');
+            const timestamp = new Date().toLocaleTimeString();
+            logsDiv.innerHTML += `<div>[${timestamp}] ${message}</div>`;
+            logsDiv.scrollTop = logsDiv.scrollHeight;
+        }
+
+        function simulateViewAgent(agentId, agentName) {
+            log(`🔍 Clic sur "Voir Agent" pour ${agentName} (ID: ${agentId})`);
+            log(`   → Appel de onViewAgent(${agentId})`);
+            log(`   → Redirection vers AgentProfile`);
+            
+            // Masquer le dashboard et afficher la fiche agent
+            document.getElementById('dashboard-view').style.display = 'none';
+            document.getElementById('agent-profile-view').style.display = 'block';
+            
+            // Remplir les informations de l'agent
+            const agent = agentsData[agentId];
+            if (agent) {
+                document.getElementById('agent-name').textContent = `Fiche de ${agent.prenom} ${agent.nom}`;
+                document.getElementById('agent-nom').textContent = `${agent.prenom} ${agent.nom}`;
+                document.getElementById('agent-email').textContent = agent.email;
+                document.getElementById('agent-role').textContent = agent.role;
+                document.getElementById('agent-service').textContent = agent.service;
+                document.getElementById('agent-quotite').textContent = agent.quotite;
+                document.getElementById('agent-date').textContent = agent.date_entree;
+                
+                log(`   ✅ Affichage de la fiche de ${agent.prenom} ${agent.nom}`);
+                log(`   → Email: ${agent.email}`);
+                log(`   → Rôle: ${agent.role}`);
+                log(`   → Service: ${agent.service}`);
+            }
+        }
+
+        function simulateBackToDashboard() {
+            log(`← Retour au Dashboard Admin`);
+            log(`   → Appel de handleBackToDashboard()`);
+            
+            // Masquer la fiche agent et afficher le dashboard
+            document.getElementById('agent-profile-view').style.display = 'none';
+            document.getElementById('dashboard-view').style.display = 'block';
+            
+            log(`   ✅ Retour au Dashboard Admin`);
+        }
+
+        // Log initial
+        log('🚀 Test de navigation Agent initialisé');
+        log('   → Dans l\'application réelle, onViewAgent devrait rediriger vers AgentProfile');
+        log('   → handleBackToDashboard devrait ramener au dashboard admin');
+    </script>
+</body>
+</html>
+
