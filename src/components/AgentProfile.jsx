@@ -5,6 +5,7 @@ import { Badge } from './ui/badge'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from './ui/table'
 import { ArrowLeft, User, Calendar, Clock, FileText, Edit } from 'lucide-react'
+import api from '../services/api'
 
 const AgentProfile = ({ agentId, onBack, onEditAgent }) => {
   const [agent, setAgent] = useState(null)
@@ -24,27 +25,33 @@ const AgentProfile = ({ agentId, onBack, onEditAgent }) => {
       setLoading(true)
       
       // Récupérer les données de l'agent
-      const agentResponse = await fetch(`/api/agents/${agentId}`)
-      if (!agentResponse.ok) {
-        throw new Error('Agent non trouvé')
+      const agentResponse = await api.getAgents()
+      if (agentResponse.ok) {
+        const agentsData = await agentResponse.json()
+        const agentData = agentsData.find(a => a.id === agentId)
+        if (agentData) {
+          setAgent(agentData)
+        } else {
+          throw new Error('Agent non trouvé')
+        }
+      } else {
+        throw new Error('Erreur lors du chargement des agents')
       }
-      const agentData = await agentResponse.json()
-      setAgent(agentData)
 
       // Récupérer les demandes de congé de l'agent
-      const demandesResponse = await fetch(`/api/demandes/agent/${agentId}`)
+      const demandesResponse = await api.getDemandes()
       if (demandesResponse.ok) {
-        const demandesData = await demandesResponse.json()
-        setDemandes(demandesData)
+        const allDemandes = await demandesResponse.json()
+        const agentDemandes = allDemandes.filter(d => d.agent_id === agentId)
+        setDemandes(agentDemandes)
       }
 
       // Récupérer les arrêts maladie de l'agent
-      const arretsMaladieResponse = await fetch(`/api/arret-maladie?agent_id=${agentId}`, {
-        credentials: 'include'
-      })
+      const arretsMaladieResponse = await api.getArretsMaladie()
       if (arretsMaladieResponse.ok) {
-        const arretsMaladieData = await arretsMaladieResponse.json()
-        setArretsMaladie(arretsMaladieData)
+        const allArretsMaladie = await arretsMaladieResponse.json()
+        const agentArretsMaladie = allArretsMaladie.filter(a => a.agent_id === agentId)
+        setArretsMaladie(agentArretsMaladie)
       }
     } catch (err) {
       setError(err.message)
