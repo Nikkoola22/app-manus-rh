@@ -43,7 +43,7 @@ CORS(app,
      methods=['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
  )
 # Register blueprints
-app.register_blueprint(auth_bp, url_prefix='/api')
+app.register_blueprint(auth_bp, url_prefix='/api/auth')
 app.register_blueprint(agents_bp, url_prefix='/api')
 app.register_blueprint(services_bp, url_prefix='/api')
 app.register_blueprint(demandes_bp, url_prefix='/api')
