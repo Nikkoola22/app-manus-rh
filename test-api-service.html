@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test API Service</title>
+</head>
+<body>
+    <h1>Test API Service - App Manus RH</h1>
+    <button onclick="testCheckSession()">Test Check Session</button>
+    <button onclick="testLogin()">Test Login</button>
+    <div id="result"></div>
+
+    <script>
+        const API_BASE_URL = 'https://app-manus-rh-api.onrender.com/api';
+        
+        async function testCheckSession() {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = 'Test Check Session en cours...';
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/auth/check-session`, {
+                    method: 'GET',
+                    credentials: 'include',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                const data = await response.json();
+                
+                resultDiv.innerHTML = `
+                    <h3>✅ Check Session fonctionne !</h3>
+                    <p><strong>Status:</strong> ${response.status}</p>
+                    <p><strong>Response:</strong> ${JSON.stringify(data, null, 2)}</p>
+                    <p><strong>Headers:</strong> ${JSON.stringify(Object.fromEntries(response.headers.entries()), null, 2)}</p>
+                `;
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <h3>❌ Erreur Check Session :</h3>
+                    <p style="color: red;">${error.message}</p>
+                    <p><strong>Type:</strong> ${error.name}</p>
+                `;
+            }
+        }
+        
+        async function testLogin() {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = 'Test Login en cours...';
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/auth/login`, {
+                    method: 'POST',
+                    credentials: 'include',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        email: 'test@test.com',
+                        password: 'test'
+                    })
+                });
+                
+                const data = await response.json();
+                
+                resultDiv.innerHTML = `
+                    <h3>✅ Login fonctionne !</h3>
+                    <p><strong>Status:</strong> ${response.status}</p>
+                    <p><strong>Response:</strong> ${JSON.stringify(data, null, 2)}</p>
+                    <p><strong>Headers:</strong> ${JSON.stringify(Object.fromEntries(response.headers.entries()), null, 2)}</p>
+                `;
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <h3>❌ Erreur Login :</h3>
+                    <p style="color: red;">${error.message}</p>
+                    <p><strong>Type:</strong> ${error.name}</p>
+                `;
+            }
+        }
+    </script>
+</body>
+</html>
