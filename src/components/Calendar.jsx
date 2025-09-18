@@ -8,6 +8,7 @@ import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
 import { ChevronLeft, ChevronRight, Calendar as CalendarIcon, Plus, Edit, Trash2, Users, TrendingUp } from 'lucide-react'
+import api from '../services/api'
 
 const Calendar = ({ user }) => {
   const [currentSemaine, setCurrentSemaine] = useState('')
@@ -94,9 +95,7 @@ const Calendar = ({ user }) => {
   const fetchCalendrier = async (semaine) => {
     setLoading(true)
     try {
-      const response = await fetch(`/api/presence/calendrier/semaine/${semaine}`, {
-        credentials: 'include'
-      })
+      const response = await api.getPresenceCalendrier(semaine)
       if (response.ok) {
         const data = await response.json()
         setCalendrierData(data)
@@ -112,9 +111,7 @@ const Calendar = ({ user }) => {
 
   const fetchStatistiques = async (semaine) => {
     try {
-      const response = await fetch(`/api/presence/statistiques/semaine/${semaine}`, {
-        credentials: 'include'
-      })
+      const response = await api.getPresenceStatistiques(semaine)
       if (response.ok) {
         const data = await response.json()
         setStatistiques(data)
@@ -182,17 +179,9 @@ const Calendar = ({ user }) => {
   const handlePresenceSubmit = async (e) => {
     e.preventDefault()
     try {
-      const url = editingPresence ? `/api/presence/${editingPresence.id}` : '/api/presence'
-      const method = editingPresence ? 'PUT' : 'POST'
-      
-      const response = await fetch(url, {
-        method,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        credentials: 'include',
-        body: JSON.stringify(presenceForm),
-      })
+      const response = editingPresence 
+        ? await api.updatePresence(editingPresence.id, presenceForm)
+        : await api.createPresence(presenceForm)
 
       if (response.ok) {
         await fetchCalendrier(currentSemaine)
@@ -211,10 +200,7 @@ const Calendar = ({ user }) => {
   const handleDeletePresence = async (presenceId) => {
     if (confirm('Êtes-vous sûr de vouloir supprimer cette présence ?')) {
       try {
-        const response = await fetch(`/api/presence/${presenceId}`, {
-          method: 'DELETE',
-          credentials: 'include',
-        })
+        const response = await api.deletePresence(presenceId)
 
         if (response.ok) {
           await fetchCalendrier(currentSemaine)

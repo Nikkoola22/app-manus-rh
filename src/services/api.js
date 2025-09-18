@@ -97,7 +97,13 @@ export const api = {
   }),
 
   // Planning endpoints
-  getPlanningAgent: (agentId) => DEMO_MODE ? mockResponse([]) : fetch(`${API_BASE_URL}/planning/agent/${agentId}`, { credentials: 'include' }),
+  getPlanningAgent: (agentId) => DEMO_MODE ? mockResponse({ planning: {} }) : fetch(`${API_BASE_URL}/planning/agent/${agentId}`, { credentials: 'include' }),
+  savePlanningAgent: (agentId, data) => DEMO_MODE ? mockResponse({ success: true }) : fetch(`${API_BASE_URL}/planning/agent/${agentId}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    credentials: 'include',
+    body: JSON.stringify(data)
+  }),
   updatePlanningAgent: (agentId, data) => DEMO_MODE ? mockResponse({ success: true }) : fetch(`${API_BASE_URL}/planning/agent/${agentId}`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
@@ -108,6 +114,18 @@ export const api = {
   // Presence endpoints
   getPresenceCalendrier: (semaine) => DEMO_MODE ? mockResponse([]) : fetch(`${API_BASE_URL}/presence/calendrier/semaine/${semaine}`, { credentials: 'include' }),
   getPresenceStatistiques: (semaine) => DEMO_MODE ? mockResponse([]) : fetch(`${API_BASE_URL}/presence/statistiques/semaine/${semaine}`, { credentials: 'include' }),
+  createPresence: (data) => DEMO_MODE ? mockResponse({ success: true }) : fetch(`${API_BASE_URL}/presence`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    credentials: 'include',
+    body: JSON.stringify(data)
+  }),
+  updatePresence: (id, data) => DEMO_MODE ? mockResponse({ success: true }) : fetch(`${API_BASE_URL}/presence/${id}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    credentials: 'include',
+    body: JSON.stringify(data)
+  }),
   deletePresence: (id) => DEMO_MODE ? mockResponse({ success: true }) : fetch(`${API_BASE_URL}/presence/${id}`, {
     method: 'DELETE',
     credentials: 'include'
