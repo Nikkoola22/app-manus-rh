@@ -153,3 +153,4 @@ pause_fin: data.plannings[0].pause_fin || null
 2. **Affichage** : Mise à jour immédiate dans l'interface
 3. **Synchronisation** : Cohérence entre sauvegarde et affichage
 4. **UX** : Interface réactive sans rechargement de page
+

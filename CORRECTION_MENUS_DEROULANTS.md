@@ -107,3 +107,4 @@ className={cn(
 - **Texte noir** : Lisibilité optimale
 - **Effet de survol bleu** : Interaction claire
 - **Ombre portée** : Profondeur visuelle
+

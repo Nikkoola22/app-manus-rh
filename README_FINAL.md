@@ -265,3 +265,4 @@ L'application fonctionne sur Windows, macOS et Linux sans configuration supplém
 **Version portable générée le** : $(date)  
 **Compatible avec** : Python 3.8+, Node.js 16+  
 **Base de données** : SQLite (portable)
+

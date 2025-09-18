@@ -73,3 +73,4 @@ import { Clock, Calendar, Save, X, Plus, Trash2, Edit } from 'lucide-react'
 **🎉 L'erreur Edit est maintenant corrigée !**
 
 Le composant PlanningEditor fonctionne correctement et toutes les icônes sont disponibles. Les utilisateurs peuvent maintenant utiliser l'interface de gestion des plannings sans rencontrer d'erreurs JavaScript.
+

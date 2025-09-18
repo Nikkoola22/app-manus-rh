@@ -123,3 +123,4 @@ if demi_journees == 'matin' or demi_journees == 'après-midi':
 - **Après-midi** : Heures réelles de travail de l'après-midi
 - **Précision** : Calcul exact selon le planning
 - **Flexibilité** : Adaptation aux plannings individuels
+

@@ -196,3 +196,4 @@ const TabsContent = React.forwardRef(({ className, value, ...props }, ref) => {
 - **État** : Gestion d'état React complète
 - **Scroll** : Scroll automatique vers les sections
 - **UI** : Interface utilisateur intuitive et responsive
+

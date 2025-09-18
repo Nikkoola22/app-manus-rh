@@ -31,3 +31,4 @@ def test_email():
             'error': f'Erreur: {str(e)}',
             'success': False
         }), 500
+

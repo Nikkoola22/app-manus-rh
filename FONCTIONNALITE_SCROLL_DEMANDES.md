@@ -197,3 +197,4 @@ const handleTabChange = (value) => {
 - **Performance** : Délai optimisé pour le rendu
 - **Compatibilité** : Fonctionne avec tous les navigateurs modernes
 - **UX améliorée** : Navigation plus intuitive et rapide
+

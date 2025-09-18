@@ -126,3 +126,4 @@ python3 build_portable.py
 ---
 
 **🎉 L'application RH est maintenant portable et prête à être utilisée !**
+

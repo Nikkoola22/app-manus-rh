@@ -147,3 +147,4 @@ EMAIL_PASSWORD=votre-mot-de-passe-app
 - **Templates professionnels** avec design moderne
 - **Informations complètes** pour l'agent
 - **Système fiable** avec gestion d'erreurs
+

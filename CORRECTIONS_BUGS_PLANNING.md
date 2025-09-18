@@ -194,3 +194,4 @@ Les corrections apportées garantissent :
 - Une gestion d'erreurs robuste
 - Des données cohérentes
 - Une interface réactive
+

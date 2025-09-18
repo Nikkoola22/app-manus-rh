@@ -147,3 +147,4 @@ git remote add origin https://github.com/VOTRE_USERNAME/app-rh.git && git push -
 ```
 
 **🎯 Prochaine étape** : Créer le dépôt GitHub et exécuter la commande de push !
+

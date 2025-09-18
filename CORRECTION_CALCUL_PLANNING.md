@@ -154,3 +154,4 @@ work_hours = work_duration_minutes / 60
 - **CA** : Calcul basé sur la quotité de travail
 - **Précision** : Heures exactes selon le planning
 - **Flexibilité** : Adaptation aux plannings individuels
+

@@ -136,3 +136,4 @@ python3 test_calculs_conges.py
 ---
 
 **📝 Note** : Cette modification améliore la précision et la conformité de l'application avec les standards RH français.
+

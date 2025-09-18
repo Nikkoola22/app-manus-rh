@@ -493,3 +493,4 @@ if __name__ == "__main__":
     builder = PortableBuilder()
     success = builder.build()
     sys.exit(0 if success else 1)
+

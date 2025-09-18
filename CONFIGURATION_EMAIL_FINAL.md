@@ -144,3 +144,4 @@ MAIL_PASSWORD=abcd efgh ijkl mnop
 **🎉 Une fois le mot de passe d'application Gmail configuré, vous recevrez tous les emails de notification !**
 
 **Prochaine étape** : Configurer le mot de passe d'application Gmail dans le fichier `.env`
+

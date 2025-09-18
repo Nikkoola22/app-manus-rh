@@ -126,3 +126,4 @@ Les agents peuvent :
 - Consulter leur planning détaillé
 - Voir leurs horaires de travail
 - Identifier les périodes de pause
+

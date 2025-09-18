@@ -84,3 +84,4 @@ corrections = {
 **🎉 Le problème "Rôle non reconnu" est maintenant résolu !**
 
 L'application reconnaît correctement tous les rôles et l'authentification fonctionne parfaitement.
+
