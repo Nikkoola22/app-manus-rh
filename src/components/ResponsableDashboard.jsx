@@ -9,6 +9,7 @@ import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
+import api from '../services/api'
 import { 
   Users, 
   Clock, 
@@ -108,10 +109,10 @@ const ResponsableDashboard = ({ user, onViewAgent }) => {
   const fetchData = async () => {
     try {
       const [demandesResponse, agentsResponse, arretsMaladieResponse, mesDemandesResponse] = await Promise.all([
-        fetch('/api/demandes', { credentials: 'include' }),
-        fetch('/api/agents', { credentials: 'include' }),
-        fetch('/api/arret-maladie', { credentials: 'include' }),
-        fetch('/api/demandes/mes-demandes', { credentials: 'include' })
+        api.getDemandes(),
+        api.getAgents(),
+        api.getArretsMaladie(),
+        api.getMesDemandes()
       ])
 
       if (demandesResponse.ok) {
@@ -143,17 +144,7 @@ const ResponsableDashboard = ({ user, onViewAgent }) => {
   const handleValidation = async (demandeId, action) => {
     setActionLoading(true)
     try {
-      const response = await fetch(`/api/demandes/${demandeId}/valider`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        credentials: 'include',
-        body: JSON.stringify({
-          action,
-          commentaires
-        }),
-      })
+      const response = await api.validerDemande(demandeId)
 
       if (response.ok) {
         await fetchData() // Recharger les données
@@ -201,16 +192,9 @@ const ResponsableDashboard = ({ user, onViewAgent }) => {
   const handleDemandeSubmit = async (e) => {
     e.preventDefault()
     try {
-      const response = await fetch('/api/demandes', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        credentials: 'include',
-        body: JSON.stringify({
-          agent_id: user.id,
-          ...demandeForm
-        }),
+      const response = await api.createDemande({
+        agent_id: user.id,
+        ...demandeForm
       })
 
       if (response.ok) {
@@ -272,10 +256,7 @@ const ResponsableDashboard = ({ user, onViewAgent }) => {
   const handleDeleteArretMaladie = async (arretId) => {
     if (confirm('Êtes-vous sûr de vouloir supprimer cet arrêt maladie ?')) {
       try {
-        const response = await fetch(`/api/arret-maladie/${arretId}`, {
-          method: 'DELETE',
-          credentials: 'include',
-        })
+        const response = await api.deleteArretMaladie(arretId)
 
         if (response.ok) {
           await fetchData()

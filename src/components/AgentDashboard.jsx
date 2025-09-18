@@ -7,6 +7,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Plus, Clock, Calendar, FileText, AlertCircle, User, Briefcase, CalendarDays, X } from 'lucide-react'
 import DemandeForm from './DemandeForm'
 import PlanningAgent from './PlanningAgent'
+import api from '../services/api'
 
 const AgentDashboard = ({ user }) => {
   const [demandes, setDemandes] = useState([])
@@ -22,9 +23,7 @@ const AgentDashboard = ({ user }) => {
 
   const fetchDemandes = async () => {
     try {
-      const response = await fetch('/api/demandes', {
-        credentials: 'include',
-      })
+      const response = await api.getDemandes()
       if (response.ok) {
         const data = await response.json()
         setDemandes(data)
@@ -38,9 +37,7 @@ const AgentDashboard = ({ user }) => {
 
   const fetchArretsMaladie = async () => {
     try {
-      const response = await fetch(`/api/arret-maladie?agent_id=${user.id}`, {
-        credentials: 'include'
-      })
+      const response = await api.getArretsMaladie(user.id)
       if (response.ok) {
         const data = await response.json()
         setArretsMaladie(data)
@@ -56,13 +53,7 @@ const AgentDashboard = ({ user }) => {
     }
 
     try {
-      const response = await fetch(`/api/demandes/${demandeId}/annuler`, {
-        method: 'POST',
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
+      const response = await api.annulerDemande(demandeId)
 
       if (response.ok) {
         const result = await response.json()
