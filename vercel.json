@@ -1,14 +1,5 @@
 {
-  "build": {
-    "env": {
-      "VITE_API_URL": "https://app-manus-rh-api.onrender.com/api"
-    }
-  },
   "rewrites": [
-    {
-      "source": "/api/(.*)",
-      "destination": "https://app-manus-rh-api.onrender.com/api/$1"
-    },
     {
       "source": "/(.*)",
       "destination": "/index.html"

@@ -1,5 +1,6 @@
 // Service API centralisé pour gérer les URLs d'API
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://app-manus-rh-api.onrender.com/api';
+// Utilisation directe de l'URL Render pour éviter les problèmes de redirection Vercel
+const API_BASE_URL = 'https://app-manus-rh-api.onrender.com/api';
 
 export const api = {
   // Auth endpoints
