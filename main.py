@@ -34,12 +34,16 @@ app.config['SECRET_KEY'] = 'conges-rtt-secret-key-2024'
 # Enable CORS for all routes
 CORS(app, 
      supports_credentials=True,
-     origins=['http://localhost:5173', 'http://127.0.0.1:5173'],
+     origins=[
+         'http://localhost:5173', 
+         'http://127.0.0.1:5173',
+         'https://app-manus-9r0k68ntb-nikkoola-4074s-projects.vercel.app'  # <-- AJOUTEZ CETTE LIGNE
+     ],
      allow_headers=['Content-Type', 'Authorization'],
-     methods=['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'])
-
+     methods=['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
+ )
 # Register blueprints
-app.register_blueprint(auth_bp, url_prefix='/api/auth')
+app.register_blueprint(auth_bp, url_prefix='/api')
 app.register_blueprint(agents_bp, url_prefix='/api')
 app.register_blueprint(services_bp, url_prefix='/api')
 app.register_blueprint(demandes_bp, url_prefix='/api')
