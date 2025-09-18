@@ -182,3 +182,4 @@ Votre application de gestion RH est maintenant :
 - **Backend** : https://app-manus-rh-api.onrender.com
 
 **Prochaine étape** : Tester l'application et configurer les variables d'environnement !
+

@@ -3,6 +3,7 @@ import TestLogin from './TestLogin'
 import TestDialog from './TestDialog'
 import Login from './components/Login'
 import Dashboard from './components/Dashboard'
+import api from './services/api'
 import './index.css'
 import './styles/dialog-fixes.css'
 
@@ -17,9 +18,7 @@ function App() {
 
   const checkSession = async () => {
     try {
-      const response = await fetch('/api/auth/check-session', {
-        credentials: 'include',
-      })
+      const response = await api.checkSession()
       const data = await response.json()
       
       if (data.authenticated) {

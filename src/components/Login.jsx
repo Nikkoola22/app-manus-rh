@@ -5,6 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Label } from '@/components/ui/label'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Loader2, User, Lock, Calendar, Building2 } from 'lucide-react'
+import api from '../services/api'
 
 const Login = ({ onLogin }) => {
   const [email, setEmail] = useState('')
@@ -18,14 +19,7 @@ const Login = ({ onLogin }) => {
     setError('')
 
     try {
-      const response = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        credentials: 'include',
-        body: JSON.stringify({ email, password }),
-      })
+      const response = await api.login({ email, password })
 
       const data = await response.json()
 
