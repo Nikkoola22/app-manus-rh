@@ -1,5 +1,5 @@
 // Service API centralisé pour gérer les URLs d'API
-// Utilisation directe de l'URL Render pour éviter les problèmes de redirection Vercel
+// Utilisation directe de l'URL Render
 const API_BASE_URL = 'https://app-manus-rh-api.onrender.com/api';
 
 export const api = {
