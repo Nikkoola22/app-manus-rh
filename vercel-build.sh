@@ -3,9 +3,11 @@
 echo "Cleaning previous build..."
 rm -rf dist
 rm -rf node_modules/.vite
+rm -rf .vercel
+rm -rf node_modules
 
 echo "Installing dependencies..."
-npm ci
+npm install
 
 echo "Building application..."
 npm run build
