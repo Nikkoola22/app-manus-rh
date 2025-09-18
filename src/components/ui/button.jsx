@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils.jsx";
 const Button = React.forwardRef(({ className, variant = 'default', size = 'default', ...props }, ref) => {
   const baseClasses = 'inline-flex items-center justify-center rounded-lg text-sm font-semibold ring-offset-background transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 transform hover:-translate-y-0.5 active:translate-y-0'
   
