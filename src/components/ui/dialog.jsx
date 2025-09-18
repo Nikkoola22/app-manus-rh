@@ -1,5 +1,5 @@
 import React from 'react'
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils.jsx";
 
 const Dialog = ({ open, onOpenChange, children }) => {
   if (!open) return null
