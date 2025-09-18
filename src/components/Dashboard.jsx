@@ -4,6 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { LogOut, Calendar, Clock, Users, FileText, Settings, User, Building2 } from 'lucide-react'
+import api from '../services/api'
 import AgentDashboard from './AgentDashboard'
 import ResponsableDashboard from './ResponsableDashboard'
 import ResponsableDashboardTest from './ResponsableDashboardTest'
@@ -25,10 +26,7 @@ const Dashboard = ({ user, onLogout }) => {
   const handleLogout = async () => {
     setLoading(true)
     try {
-      await fetch('/api/auth/logout', {
-        method: 'POST',
-        credentials: 'include',
-      })
+      await api.logout()
       onLogout()
     } catch (err) {
       console.error('Erreur lors de la déconnexion:', err)
