@@ -14,7 +14,8 @@ const SimpleLogin = ({ onLogin }) => {
   const demoUsers = [
     { id: 1, nom: 'Dupont', prenom: 'Jean', email: 'jean.dupont@example.com', role: 'Agent', service_id: 1, service: 'Ressources Humaines' },
     { id: 2, nom: 'Martin', prenom: 'Marie', email: 'marie.martin@example.com', role: 'Responsable', service_id: 1, service: 'Ressources Humaines' },
-    { id: 3, nom: 'Bernard', prenom: 'Pierre', email: 'pierre.bernard@example.com', role: 'Agent', service_id: 2, service: 'Informatique' }
+    { id: 3, nom: 'Bernard', prenom: 'Pierre', email: 'pierre.bernard@example.com', role: 'Agent', service_id: 2, service: 'Informatique' },
+    { id: 4, nom: 'Durand', prenom: 'Sophie', email: 'sophie.durand@example.com', role: 'Admin', service_id: 1, service: 'Administration' }
   ]
 
   const handleSubmit = (e) => {
