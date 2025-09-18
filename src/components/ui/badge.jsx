@@ -1,5 +1,5 @@
 import React from 'react'
-import { cn } from '@/lib/lib/utils.jsx'
+import { cn } from '@/lib/utils.jsx'
 
 const Badge = React.forwardRef(({ className, variant = 'default', ...props }, ref) => {
   const variants = {
