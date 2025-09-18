@@ -5,7 +5,7 @@ import api from './services/api'
 import './index.css'
 import './styles/dialog-fixes.css'
 
-// Version nettoyée - sans mode test
+// Version nettoyée - sans mode test - Force Vercel rebuild
 
 function App() {
   const [user, setUser] = useState(null)

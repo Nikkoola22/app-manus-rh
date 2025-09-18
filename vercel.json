@@ -1,4 +1,5 @@
 {
+  "buildCommand": "./vercel-build.sh",
   "rewrites": [
     {
       "source": "/(.*)",
