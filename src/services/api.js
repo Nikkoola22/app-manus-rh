@@ -23,6 +23,9 @@ const DEMO_DATA = {
   ]
 };
 
+// Stockage local des plannings en mode démo
+let demoPlannings = {}
+
 // Fonction pour simuler une réponse API
 const mockResponse = (data, status = 200) => {
   return Promise.resolve({
@@ -97,13 +100,61 @@ export const api = {
   }),
 
   // Planning endpoints
-  getPlanningAgent: (agentId) => DEMO_MODE ? mockResponse({ planning: {} }) : fetch(`${API_BASE_URL}/planning/agent/${agentId}`, { credentials: 'include' }),
-  savePlanningAgent: (agentId, data) => DEMO_MODE ? mockResponse({ success: true }) : fetch(`${API_BASE_URL}/planning/agent/${agentId}`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    credentials: 'include',
-    body: JSON.stringify(data)
-  }),
+  getPlanningAgent: (agentId) => {
+    if (DEMO_MODE) {
+      // Retourner le planning stocké ou un planning par défaut
+      const planning = demoPlannings[agentId] || {
+        0: { // Lundi
+          plannings: [{ heure_debut: '08:00', heure_fin: '17:00', pause_debut: '12:00', pause_fin: '13:00' }],
+          creneaux: []
+        },
+        1: { // Mardi
+          plannings: [{ heure_debut: '08:00', heure_fin: '17:00', pause_debut: '12:00', pause_fin: '13:00' }],
+          creneaux: []
+        },
+        2: { // Mercredi
+          plannings: [{ heure_debut: '08:00', heure_fin: '11:30', pause_debut: null, pause_fin: null }],
+          creneaux: []
+        },
+        3: { // Jeudi
+          plannings: [{ heure_debut: '08:00', heure_fin: '17:00', pause_debut: '12:00', pause_fin: '13:00' }],
+          creneaux: []
+        },
+        4: { // Vendredi
+          plannings: [{ heure_debut: '08:00', heure_fin: '17:00', pause_debut: '12:00', pause_fin: '13:00' }],
+          creneaux: []
+        }
+      }
+      return mockResponse({ planning })
+    }
+    return fetch(`${API_BASE_URL}/planning/agent/${agentId}`, { credentials: 'include' })
+  },
+  savePlanningAgent: (agentId, data) => {
+    if (DEMO_MODE) {
+      // Sauvegarder le planning dans le stockage local
+      if (data.plannings) {
+        demoPlannings[agentId] = {}
+        data.plannings.forEach(planning => {
+          demoPlannings[agentId][planning.jour_semaine] = {
+            plannings: [{
+              heure_debut: planning.heure_debut,
+              heure_fin: planning.heure_fin,
+              pause_debut: planning.pause_debut,
+              pause_fin: planning.pause_fin
+            }],
+            creneaux: []
+          }
+        })
+      }
+      return mockResponse({ success: true })
+    }
+    return fetch(`${API_BASE_URL}/planning/agent/${agentId}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify(data)
+    })
+  },
   updatePlanningAgent: (agentId, data) => DEMO_MODE ? mockResponse({ success: true }) : fetch(`${API_BASE_URL}/planning/agent/${agentId}`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
