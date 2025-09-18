@@ -1,4 +1,9 @@
 {
+  "build": {
+    "env": {
+      "VITE_API_URL": "/api"
+    }
+  },
   "rewrites": [
     {
       "source": "/api/:path*",
