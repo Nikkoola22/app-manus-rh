@@ -3,6 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Clock, Calendar, Edit, Save, X } from 'lucide-react'
+import api from '../services/api'
 
 const PlanningAgent = ({ agentId, agentName, canEdit = false, onEdit, refreshTrigger = 0 }) => {
   const [planning, setPlanning] = useState({})
@@ -17,9 +18,7 @@ const PlanningAgent = ({ agentId, agentName, canEdit = false, onEdit, refreshTri
     try {
       setLoading(true)
       setError('')
-      const response = await fetch(`/api/planning/agent/${agentId}`, {
-        credentials: 'include'
-      })
+      const response = await api.getPlanningAgent(agentId)
       
       if (response.ok) {
         const data = await response.json()

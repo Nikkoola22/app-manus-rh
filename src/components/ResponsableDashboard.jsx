@@ -890,7 +890,7 @@ const ResponsableDashboard = ({ user, onViewAgent }) => {
                       <PlanningAgent
                         agentId={agent.id}
                         agentName={`${agent.prenom} ${agent.nom}`}
-                        canEdit={false}
+                        canEdit={true}
                         refreshTrigger={planningRefreshTrigger}
                       />
                     </div>

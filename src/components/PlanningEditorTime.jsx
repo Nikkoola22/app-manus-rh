@@ -6,6 +6,7 @@ import { Label } from '@/components/ui/label'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Badge } from '@/components/ui/badge'
 import { Clock, Calendar, Save, X, Plus, Trash2, Edit } from 'lucide-react'
+import api from '../services/api'
 
 const PlanningEditorTime = ({ agentId, agentName, onSave, onCancel }) => {
   const [plannings, setPlannings] = useState({})
@@ -30,9 +31,7 @@ const PlanningEditorTime = ({ agentId, agentName, onSave, onCancel }) => {
   const fetchPlanning = async () => {
     try {
       setLoading(true)
-      const response = await fetch(`/api/planning/agent/${agentId}`, {
-        credentials: 'include'
-      })
+      const response = await api.getPlanningAgent(agentId)
       
       if (response.ok) {
         const data = await response.json()
@@ -105,15 +104,8 @@ const PlanningEditorTime = ({ agentId, agentName, onSave, onCancel }) => {
 
       console.log('Données à envoyer:', planningsData)
 
-      const response = await fetch(`/api/planning/agent/${agentId}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        credentials: 'include',
-        body: JSON.stringify({
-          plannings: planningsData
-        })
+      const response = await api.savePlanningAgent(agentId, {
+        plannings: planningsData
       })
 
       console.log('Réponse API:', response.status)
