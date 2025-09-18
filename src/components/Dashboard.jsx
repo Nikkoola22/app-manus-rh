@@ -7,15 +7,7 @@ import { LogOut, Calendar, Clock, Users, FileText, Settings, User, Building2 } f
 import api from '../services/api'
 import AgentDashboard from './AgentDashboard'
 import ResponsableDashboard from './ResponsableDashboard'
-import ResponsableDashboardTest from './ResponsableDashboardTest'
 import AdminDashboard from './AdminDashboard'
-import TestAdmin from './TestAdmin'
-import SimpleAdmin from './SimpleAdmin'
-import AdminTest from './AdminTest'
-import AdminDashboardSimple from './AdminDashboardSimple'
-import AdminDashboardFixed from './AdminDashboardFixed'
-import AdminDashboardNative from './AdminDashboardNative'
-import ServicesDebug from './ServicesDebug'
 import AgentProfile from './AgentProfile'
 
 const Dashboard = ({ user, onLogout }) => {
@@ -93,7 +85,7 @@ const Dashboard = ({ user, onLogout }) => {
       case 'Responsable':
         return <ResponsableDashboard user={user} onViewAgent={handleViewAgent} />
       case 'Admin':
-        return <AdminDashboardNative user={user} onViewAgent={handleViewAgent} />
+        return <AdminDashboard user={user} onViewAgent={handleViewAgent} />
       default:
         return <div>Rôle non reconnu</div>
     }
