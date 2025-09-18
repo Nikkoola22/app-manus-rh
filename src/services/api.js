@@ -1,6 +1,6 @@
 // Service API centralisé pour gérer les URLs d'API
 // Mode démo - données simulées
-const DEMO_MODE = true;
+const DEMO_MODE = true; // Force cache clear
 const API_BASE_URL = 'https://app-manus-rh-api.onrender.com/api';
 
 // Données de démonstration

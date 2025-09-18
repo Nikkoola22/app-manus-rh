@@ -4,7 +4,7 @@ import App from './App.jsx'
 import './index.css'
 
 // Force Vercel deployment - Version 0.0.3 - Cache clear
-console.log('App Manus RH - Version 0.0.3 - Cache clear complet')
+console.log('App Manus RH - Version 0.0.4 - Mode démo activé')
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
