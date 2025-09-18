@@ -18,7 +18,7 @@ from src.routes.arret_maladie import arret_maladie_bp
 from src.routes.presence import presence_bp
 from src.routes.email import email_bp
 from src.routes.planning import planning_bp
-from src.routes.test_email import test_email_bp
+# from src.routes.test_email import test_email_bp  # Supprimé - fichier de test
 
 # Configuration portable des dossiers
 STATIC_FOLDER = APP_DIR / 'static'
@@ -51,7 +51,7 @@ app.register_blueprint(arret_maladie_bp, url_prefix='/api')
 app.register_blueprint(presence_bp, url_prefix='/api')
 app.register_blueprint(email_bp, url_prefix='/api')
 app.register_blueprint(planning_bp, url_prefix='/api')
-app.register_blueprint(test_email_bp, url_prefix='/api')
+# app.register_blueprint(test_email_bp, url_prefix='/api')  # Supprimé - fichier de test
 
 # Database configuration portable
 DATABASE_PATH = DATABASE_FOLDER / 'app.db'
