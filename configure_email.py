@@ -96,3 +96,4 @@ MAIL_USE_SSL=False
 if __name__ == "__main__":
     configure_email()
 
+

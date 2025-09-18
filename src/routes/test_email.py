@@ -32,3 +32,4 @@ def test_email():
             'success': False
         }), 500
 
+

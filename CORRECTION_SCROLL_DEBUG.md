@@ -188,3 +188,4 @@ element = demandesAttenteRef.current || document.getElementById('demandes-attent
 3. Confirmer que le scroll fonctionne
 4. Supprimer les logs de débogage si tout fonctionne
 
+

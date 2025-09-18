@@ -188,3 +188,4 @@ Demande validée → Statut: "Approuvée" → Bouton "Annuler" disparaît
 - **Traçabilité** : Date d'annulation enregistrée
 - **Protection** : Contrôles stricts contre les abus
 
+

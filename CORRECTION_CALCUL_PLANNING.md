@@ -155,3 +155,4 @@ work_hours = work_duration_minutes / 60
 - **Précision** : Heures exactes selon le planning
 - **Flexibilité** : Adaptation aux plannings individuels
 
+

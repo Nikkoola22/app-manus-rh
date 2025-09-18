@@ -159,3 +159,4 @@ def calculate_rtt_from_quotite(self):
 - **Interface cohérente** entre frontend et backend
 - **Calcul automatique** basé sur la quotité de travail
 
+

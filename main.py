@@ -37,7 +37,7 @@ CORS(app,
      origins=[
          'http://localhost:5173', 
          'http://127.0.0.1:5173',
-         'https://app-manus-9r0k68ntb-nikkoola-4074s-projects.vercel.app'  # <-- AJOUTEZ CETTE LIGNE
+         'https://app-manus-rh.vercel.app'  # <-- AJOUTEZ CETTE LIGNE
      ],
      allow_headers=['Content-Type', 'Authorization'],
      methods=['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
@@ -55,7 +55,15 @@ app.register_blueprint(test_email_bp, url_prefix='/api')
 
 # Database configuration portable
 DATABASE_PATH = DATABASE_FOLDER / 'app.db'
-app.config['SQLALCHEMY_DATABASE_URI'] = f"sqlite:///{DATABASE_PATH}"
+# Configuration de la base de données
+if os.environ.get('RENDER'):
+    # Mode production Render
+    app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'sqlite:///app.db')
+    app.config['DEBUG'] = False
+else:
+    # Mode développement local
+    app.config['SQLALCHEMY_DATABASE_URI'] = f"sqlite:///{DATABASE_PATH}"
+    app.config['DEBUG'] = True
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db.init_app(app)
 

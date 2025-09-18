@@ -148,3 +148,4 @@ EMAIL_PASSWORD=votre-mot-de-passe-app
 - **Informations complètes** pour l'agent
 - **Système fiable** avec gestion d'erreurs
 
+

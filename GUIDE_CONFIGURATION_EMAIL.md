@@ -128,3 +128,4 @@ python3 test_email_config.py
 
 **🎉 Une fois configuré, vous recevrez tous les emails de notification !**
 
+

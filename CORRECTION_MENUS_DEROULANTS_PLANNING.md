@@ -145,3 +145,4 @@ import PlanningEditorTime from './PlanningEditorTime'
 3. **Meilleure compatibilité** : Fonctionne sur tous les navigateurs
 4. **Interface intuitive** : Sélection d'heures facile et fiable
 
+

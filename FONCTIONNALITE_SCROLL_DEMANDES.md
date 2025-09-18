@@ -198,3 +198,4 @@ const handleTabChange = (value) => {
 - **Compatibilité** : Fonctionne avec tous les navigateurs modernes
 - **UX améliorée** : Navigation plus intuitive et rapide
 
+

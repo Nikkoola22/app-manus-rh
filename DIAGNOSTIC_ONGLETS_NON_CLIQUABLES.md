@@ -206,3 +206,4 @@ element = demandesAttenteRef.current || document.getElementById('demandes-attent
 3. Corriger le composant Tabs ou utiliser une alternative
 4. Restaurer la version originale une fois corrigée
 
+

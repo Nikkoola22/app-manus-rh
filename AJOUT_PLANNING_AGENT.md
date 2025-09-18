@@ -158,3 +158,4 @@ AgentDashboard
 4. **Interface intuitive** : Navigation facile entre les sections
 5. **Lecture seule** : L'agent consulte, le responsable modifie
 
+

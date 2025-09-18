@@ -131,3 +131,4 @@ formatHours(calculateSoldeAvant(mouvement.type_absence, index))
 - **CET** : Affichés en heures (ex: "20h")
 - **Autres types** : Unités appropriées selon le type
 
+

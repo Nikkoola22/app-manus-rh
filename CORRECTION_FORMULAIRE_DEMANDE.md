@@ -125,3 +125,4 @@ Solde disponible: {formatSolde(formData.type_absence, getSelectedTypeSolde())}
 - **HS** : Affichés en heures (ex: "Heures Supplémentaires (Solde: 0h)")
 - **CET** : Affichés en heures (ex: "Compte Épargne Temps (Solde: 0h)")
 
+

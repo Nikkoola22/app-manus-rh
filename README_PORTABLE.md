@@ -188,3 +188,4 @@ Pour mettre à jour l'application :
 **Version portable générée le** : $(date)
 **Compatible avec** : Python 3.8+, Node.js 16+
 
+

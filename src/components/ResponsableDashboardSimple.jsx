@@ -191,3 +191,4 @@ const ResponsableDashboardSimple = ({ user }) => {
 
 export default ResponsableDashboardSimple
 
+

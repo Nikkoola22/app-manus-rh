@@ -145,3 +145,4 @@ MAIL_PASSWORD=abcd efgh ijkl mnop
 
 **Prochaine étape** : Configurer le mot de passe d'application Gmail dans le fichier `.env`
 
+

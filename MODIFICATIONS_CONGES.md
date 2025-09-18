@@ -159,3 +159,4 @@ HS 1 demi-journée : 0.0 jour, 4.0 heures
 
 **🎉 Les calculs de congés sont maintenant conformes aux standards RH français !**
 
+
