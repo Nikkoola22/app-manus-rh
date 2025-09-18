@@ -5,6 +5,8 @@ import api from './services/api'
 import './index.css'
 import './styles/dialog-fixes.css'
 
+// Version nettoyée - sans mode test
+
 function App() {
   const [user, setUser] = useState(null)
   const [loading, setLoading] = useState(true)
