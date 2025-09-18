@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react'
-import { cn } from '@/lib/utils'
+import { cn } from '@/lib/utils.jsx'
 import { ChevronDown } from 'lucide-react'
 
 const Select = ({ value, onValueChange, children, ...props }) => {
