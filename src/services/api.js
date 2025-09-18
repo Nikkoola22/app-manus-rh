@@ -26,6 +26,43 @@ const DEMO_DATA = {
 // Stockage local des plannings en mode démo
 let demoPlannings = {}
 
+// Fonction pour générer les créneaux 30 minutes à partir d'un planning
+const generateCreneaux = (heureDebut, heureFin, pauseDebut, pauseFin) => {
+  const creneaux = []
+  
+  // Convertir les heures en minutes
+  const debutMinutes = parseInt(heureDebut.split(':')[0]) * 60 + parseInt(heureDebut.split(':')[1])
+  const finMinutes = parseInt(heureFin.split(':')[0]) * 60 + parseInt(heureFin.split(':')[1])
+  const pauseDebutMinutes = pauseDebut ? parseInt(pauseDebut.split(':')[0]) * 60 + parseInt(pauseDebut.split(':')[1]) : null
+  const pauseFinMinutes = pauseFin ? parseInt(pauseFin.split(':')[0]) * 60 + parseInt(pauseFin.split(':')[1]) : null
+  
+  let currentMinutes = debutMinutes
+  
+  while (currentMinutes < finMinutes) {
+    // Vérifier si ce créneau est dans la pause
+    const estEnPause = pauseDebutMinutes && pauseFinMinutes && 
+                      currentMinutes >= pauseDebutMinutes && currentMinutes < pauseFinMinutes
+    
+    const heure = Math.floor(currentMinutes / 60)
+    const minute = currentMinutes % 60
+    const heureStr = `${heure.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`
+    
+    creneaux.push({
+      heure: heureStr,
+      en_pause: estEnPause,
+      travail: !estEnPause
+    })
+    
+    // Ajouter 30 minutes
+    currentMinutes += 30
+    
+    // Gérer le dépassement de 24h
+    if (currentMinutes >= 1440) break
+  }
+  
+  return creneaux
+}
+
 // Fonction pour simuler une réponse API
 const mockResponse = (data, status = 200) => {
   return Promise.resolve({
@@ -125,7 +162,29 @@ export const api = {
           creneaux: []
         }
       }
-      return mockResponse({ planning })
+      
+      // Générer les créneaux pour chaque jour
+      const planningAvecCreneaux = {}
+      Object.keys(planning).forEach(jour => {
+        const jourData = planning[jour]
+        if (jourData.plannings && jourData.plannings.length > 0) {
+          const planningData = jourData.plannings[0]
+          const creneaux = generateCreneaux(
+            planningData.heure_debut,
+            planningData.heure_fin,
+            planningData.pause_debut,
+            planningData.pause_fin
+          )
+          planningAvecCreneaux[jour] = {
+            ...jourData,
+            creneaux: creneaux
+          }
+        } else {
+          planningAvecCreneaux[jour] = jourData
+        }
+      })
+      
+      return mockResponse({ planning: planningAvecCreneaux })
     }
     return fetch(`${API_BASE_URL}/planning/agent/${agentId}`, { credentials: 'include' })
   },
