@@ -2,20 +2,11 @@ services:
   - type: web
     name: app-manus-rh-api
     env: python
+    plan: free
     buildCommand: pip install -r requirements.txt
     startCommand: python main.py
     envVars:
+      - key: FLASK_ENV
+        value: production
       - key: DATABASE_URL
-        value: postgresql://user:password@host:port/database
-      - key: MAIL_USERNAME
-        value: your-email@gmail.com
-      - key: MAIL_PASSWORD
-        value: your-app-password
-      - key: MAIL_DEFAULT_SENDER
-        value: your-email@gmail.com
-      - key: MAIL_SERVER
-        value: smtp.gmail.com
-      - key: MAIL_PORT
-        value: 587
-      - key: MAIL_USE_TLS
-        value: true
+        value: sqlite:///app.db
