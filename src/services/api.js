@@ -1,7 +1,7 @@
 // Service API centralisé pour gérer les URLs d'API
 // Connexion réelle avec l'API Render
 const DEMO_MODE = false; // Mode production - connexion réelle
-const API_BASE_URL = 'https://app-manus-rh-api.onrender.com/api';
+const API_BASE_URL = 'http://localhost:5001/api';
 
 // Données de démonstration
 const DEMO_DATA = {
