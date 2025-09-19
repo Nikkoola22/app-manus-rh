@@ -1,6 +1,6 @@
 // Service API centralisé pour gérer les URLs d'API
-// Mode démo - données simulées
-const DEMO_MODE = true; // Force cache clear
+// Connexion réelle avec l'API Render
+const DEMO_MODE = false; // Mode production - connexion réelle
 const API_BASE_URL = 'https://app-manus-rh-api.onrender.com/api';
 
 // Données de démonstration
@@ -87,7 +87,7 @@ export const api = {
   }),
 
   // Agents endpoints
-  getAgents: () => DEMO_MODE ? mockResponse(DEMO_DATA.agents) : fetch(`${API_BASE_URL}/agents`, { credentials: 'include' }),
+  getAgents: () => fetch(`${API_BASE_URL}/demo/agents`, { credentials: 'include' }),
   getAgent: (id) => DEMO_MODE ? mockResponse(DEMO_DATA.agents.find(a => a.id === parseInt(id))) : fetch(`${API_BASE_URL}/agents/${id}`, { credentials: 'include' }),
   updateAgent: (id, data) => DEMO_MODE ? mockResponse({ success: true }) : fetch(`${API_BASE_URL}/agents/${id}`, {
     method: 'PUT',
@@ -101,7 +101,7 @@ export const api = {
   }),
 
   // Services endpoints
-  getServices: () => DEMO_MODE ? mockResponse(DEMO_DATA.services) : fetch(`${API_BASE_URL}/services`, { credentials: 'include' }),
+  getServices: () => fetch(`${API_BASE_URL}/demo/services`, { credentials: 'include' }),
   getService: (id) => DEMO_MODE ? mockResponse(DEMO_DATA.services.find(s => s.id === parseInt(id))) : fetch(`${API_BASE_URL}/services/${id}`, { credentials: 'include' }),
   updateService: (id, data) => DEMO_MODE ? mockResponse({ success: true }) : fetch(`${API_BASE_URL}/services/${id}`, {
     method: 'PUT',
@@ -111,7 +111,7 @@ export const api = {
   }),
 
   // Demandes endpoints
-  getDemandes: () => DEMO_MODE ? mockResponse(DEMO_DATA.demandes) : fetch(`${API_BASE_URL}/demandes`, { credentials: 'include' }),
+  getDemandes: () => fetch(`${API_BASE_URL}/demo/demandes`, { credentials: 'include' }),
   getMesDemandes: () => DEMO_MODE ? mockResponse(DEMO_DATA.demandes) : fetch(`${API_BASE_URL}/demandes/mes-demandes`, { credentials: 'include' }),
   getDemandesAgent: (agentId) => DEMO_MODE ? mockResponse(DEMO_DATA.demandes.filter(d => d.agent_id === parseInt(agentId))) : fetch(`${API_BASE_URL}/demandes/agent/${agentId}`, { credentials: 'include' }),
   createDemande: (data) => DEMO_MODE ? mockResponse({ success: true, id: Date.now() }) : fetch(`${API_BASE_URL}/demandes`, {
@@ -130,7 +130,7 @@ export const api = {
   }),
 
   // Arrêts maladie endpoints
-  getArretsMaladie: (agentId) => DEMO_MODE ? mockResponse(DEMO_DATA.arretsMaladie) : fetch(`${API_BASE_URL}/arret-maladie${agentId ? `?agent_id=${agentId}` : ''}`, { credentials: 'include' }),
+  getArretsMaladie: (agentId) => fetch(`${API_BASE_URL}/demo/arrets-maladie`, { credentials: 'include' }),
   deleteArretMaladie: (id) => DEMO_MODE ? mockResponse({ success: true }) : fetch(`${API_BASE_URL}/arret-maladie/${id}`, {
     method: 'DELETE',
     credentials: 'include'

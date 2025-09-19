@@ -30,6 +30,37 @@ def role_required(roles):
 @auth_bp.route('/login', methods=['POST'])
 def login():
     data = request.get_json()
+    
+    # Support pour login simplifié (nom + rôle)
+    if 'nom' in data and 'role' in data:
+        nom = data.get('nom')
+        role = data.get('role')
+        
+        if not nom or not role:
+            return jsonify({'error': 'Nom et rôle requis'}), 400
+        
+        # Créer un utilisateur temporaire pour la session
+        user_data = {
+            'id': 1 if role == 'Agent' else 2 if role == 'Responsable' else 3,
+            'nom': nom,
+            'prenom': nom.split(' ')[0] if ' ' in nom else nom,
+            'email': f"{nom.lower().replace(' ', '.')}@example.com",
+            'role': role,
+            'service_id': 1,
+            'quotite_travail': 35,
+            'solde_ca': 25,
+            'solde_rtt': 18,
+            'solde_hs': 0
+        }
+        
+        session['user_id'] = user_data['id']
+        session['user_role'] = role
+        return jsonify({
+            'message': 'Connexion réussie',
+            'user': user_data
+        }), 200
+    
+    # Support pour login classique (email + mot de passe)
     email = data.get('email')
     password = data.get('password')
     
@@ -66,12 +97,32 @@ def get_current_user():
 @auth_bp.route('/check-session', methods=['GET'])
 def check_session():
     if 'user_id' in session:
-        user = Agent.query.get(session['user_id'])
-        if user:
+        # Pour les utilisateurs simplifiés, retourner les données de session
+        if session['user_id'] in [1, 2, 3]:
+            user_data = {
+                'id': session['user_id'],
+                'nom': 'Utilisateur',
+                'prenom': 'Test',
+                'email': 'test@example.com',
+                'role': session['user_role'],
+                'service_id': 1,
+                'quotite_travail': 35,
+                'solde_ca': 25,
+                'solde_rtt': 18,
+                'solde_hs': 0
+            }
             return jsonify({
                 'authenticated': True,
-                'user': user.to_dict()
+                'user': user_data
             }), 200
+        else:
+            # Pour les vrais utilisateurs de la base de données
+            user = Agent.query.get(session['user_id'])
+            if user:
+                return jsonify({
+                    'authenticated': True,
+                    'user': user.to_dict()
+                }), 200
     
     return jsonify({'authenticated': False}), 200
 
