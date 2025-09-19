@@ -144,17 +144,23 @@ const ResponsableDashboard = ({ user, onViewAgent }) => {
   const handleValidation = async (demandeId, action) => {
     setActionLoading(true)
     try {
-      const response = await api.validerDemande(demandeId)
+      let response
+      if (action === 'approuver') {
+        response = await api.validerDemande(demandeId)
+      } else if (action === 'refuser') {
+        response = await api.rejeterDemande(demandeId)
+      }
 
-      if (response.ok) {
+      if (response && response.success) {
         await fetchData() // Recharger les données
         setSelectedDemande(null)
         setCommentaires('')
+        alert(response.message || 'Action effectuée avec succès')
       } else {
-        const data = await response.json()
-        alert(data.error || 'Erreur lors de la validation')
+        alert(response?.error || 'Erreur lors de l\'action')
       }
     } catch (err) {
+      console.error('Erreur lors de la validation:', err)
       alert('Erreur de connexion au serveur')
     } finally {
       setActionLoading(false)

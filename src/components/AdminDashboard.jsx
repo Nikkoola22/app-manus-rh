@@ -128,6 +128,91 @@ const AdminDashboard = ({ user, onViewAgent }) => {
     }
   }
 
+  // Fonctions de gestion des formulaires
+  const handleAgentSubmit = async (e) => {
+    e.preventDefault()
+    try {
+      const result = await api.createAgent(agentForm)
+      if (result.success) {
+        setAgents([...agents, result.agent])
+        setShowAgentForm(false)
+        setAgentForm({
+          nom: '',
+          prenom: '',
+          email: '',
+          password: '',
+          role: 'Agent',
+          service_id: '',
+          quotite_travail: 35,
+          date_debut_contrat: '',
+          annee_entree_fp: '',
+          date_fin_contrat: '',
+          solde_ca: 0,
+          solde_rtt: 0,
+          solde_cet: 0,
+          solde_bonifications: 0,
+          solde_jours_sujetions: 0,
+          solde_conges_formations: 0,
+          solde_hs: 0
+        })
+        alert('Agent créé avec succès !')
+      }
+    } catch (error) {
+      console.error('Erreur lors de la création de l\'agent:', error)
+      alert('Erreur lors de la création de l\'agent')
+    }
+  }
+
+  const handleServiceSubmit = async (e) => {
+    e.preventDefault()
+    try {
+      const result = await api.createService(serviceForm)
+      if (result.success) {
+        setServices([...services, result.service])
+        setShowServiceForm(false)
+        setServiceForm({
+          nom_service: '',
+          responsable_id: ''
+        })
+        alert('Service créé avec succès !')
+      }
+    } catch (error) {
+      console.error('Erreur lors de la création du service:', error)
+      alert('Erreur lors de la création du service')
+    }
+  }
+
+  const handleArretMaladieSubmit = async (e) => {
+    e.preventDefault()
+    try {
+      // Simulation de création d'arrêt maladie
+      const newArret = {
+        id: Date.now(),
+        agent_id: arretMaladieForm.agent_id,
+        date_debut: arretMaladieForm.date_debut,
+        date_fin: arretMaladieForm.date_fin,
+        motif: arretMaladieForm.motif,
+        statut: 'En cours',
+        agent: {
+          prenom: agents.find(a => a.id === parseInt(arretMaladieForm.agent_id))?.prenom || 'Agent',
+          nom: agents.find(a => a.id === parseInt(arretMaladieForm.agent_id))?.nom || 'Inconnu'
+        }
+      }
+      setArretsMaladie([...arretsMaladie, newArret])
+      setShowArretMaladieForm(false)
+      setArretMaladieForm({
+        agent_id: '',
+        date_debut: '',
+        date_fin: '',
+        motif: ''
+      })
+      alert('Arrêt maladie créé avec succès !')
+    } catch (error) {
+      console.error('Erreur lors de la création de l\'arrêt maladie:', error)
+      alert('Erreur lors de la création de l\'arrêt maladie')
+    }
+  }
+
   const demandesEnAttente = demandes.filter(d => d.statut === 'En attente')
   const totalAgents = agents.length
   const totalServices = services.length

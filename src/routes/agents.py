@@ -372,3 +372,73 @@ def get_demo_presence_statistiques(semaine):
     }
     return jsonify(demo_statistiques), 200
 
+# Routes pour la création d'agents (Admin)
+@agents_bp.route('/demo/agents', methods=['POST'])
+def create_demo_agent():
+    """Route de démonstration pour créer un agent"""
+    data = request.get_json()
+    new_agent = {
+        'id': 999,  # ID temporaire
+        'nom': data.get('nom', 'Nouveau'),
+        'prenom': data.get('prenom', 'Agent'),
+        'email': data.get('email', 'nouveau@example.com'),
+        'role': data.get('role', 'Agent'),
+        'service_id': data.get('service_id', 1),
+        'quotite_travail': data.get('quotite_travail', 35),
+        'solde_ca': data.get('solde_ca', 25),
+        'solde_rtt': data.get('solde_rtt', 18),
+        'solde_hs': data.get('solde_hs', 0)
+    }
+    return jsonify({'success': True, 'agent': new_agent}), 201
+
+# Routes pour la création de services (Admin)
+@agents_bp.route('/demo/services', methods=['POST'])
+def create_demo_service():
+    """Route de démonstration pour créer un service"""
+    data = request.get_json()
+    new_service = {
+        'id': 999,  # ID temporaire
+        'nom_service': data.get('nom_service', 'Nouveau Service'),
+        'responsable_id': data.get('responsable_id'),
+        'nb_agents': 0
+    }
+    return jsonify({'success': True, 'service': new_service}), 201
+
+# Routes pour la validation des demandes (Responsable)
+@agents_bp.route('/demo/demandes/<int:demande_id>/valider', methods=['POST'])
+def valider_demo_demande(demande_id):
+    """Route de démonstration pour valider une demande"""
+    return jsonify({'success': True, 'message': 'Demande validée avec succès'}), 200
+
+@agents_bp.route('/demo/demandes/<int:demande_id>/rejeter', methods=['POST'])
+def rejeter_demo_demande(demande_id):
+    """Route de démonstration pour rejeter une demande"""
+    return jsonify({'success': True, 'message': 'Demande rejetée'}), 200
+
+# Routes pour les présences
+@agents_bp.route('/demo/presence', methods=['POST'])
+def create_demo_presence():
+    """Route de démonstration pour créer une présence"""
+    data = request.get_json()
+    new_presence = {
+        'id': 999,
+        'agent_id': data.get('agent_id'),
+        'date_presence': data.get('date_presence'),
+        'creneau': data.get('creneau'),
+        'statut': data.get('statut'),
+        'heure_debut': data.get('heure_debut'),
+        'heure_fin': data.get('heure_fin'),
+        'motif': data.get('motif', '')
+    }
+    return jsonify({'success': True, 'presence': new_presence}), 201
+
+@agents_bp.route('/demo/presence/<int:presence_id>', methods=['PUT'])
+def update_demo_presence(presence_id):
+    """Route de démonstration pour modifier une présence"""
+    return jsonify({'success': True, 'message': 'Présence modifiée avec succès'}), 200
+
+@agents_bp.route('/demo/presence/<int:presence_id>', methods=['DELETE'])
+def delete_demo_presence(presence_id):
+    """Route de démonstration pour supprimer une présence"""
+    return jsonify({'success': True, 'message': 'Présence supprimée avec succès'}), 200
+

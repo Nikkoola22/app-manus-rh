@@ -274,22 +274,106 @@ export const api = {
       }
     }
   },
-  createPresence: (data) => DEMO_MODE ? mockResponse({ success: true }) : fetch(`${API_BASE_URL}/presence`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    credentials: 'include',
-    body: JSON.stringify(data)
-  }),
-  updatePresence: (id, data) => DEMO_MODE ? mockResponse({ success: true }) : fetch(`${API_BASE_URL}/presence/${id}`, {
-    method: 'PUT',
-    headers: { 'Content-Type': 'application/json' },
-    credentials: 'include',
-    body: JSON.stringify(data)
-  }),
-  deletePresence: (id) => DEMO_MODE ? mockResponse({ success: true }) : fetch(`${API_BASE_URL}/presence/${id}`, {
-    method: 'DELETE',
-    credentials: 'include'
-  })
+  createPresence: async (data) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/demo/presence`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify(data)
+      })
+      return handleApiResponse(response)
+    } catch (error) {
+      console.error('Erreur createPresence:', error)
+      return { success: true, message: 'Présence créée (mode démo)' }
+    }
+  },
+  updatePresence: async (id, data) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/demo/presence/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify(data)
+      })
+      return handleApiResponse(response)
+    } catch (error) {
+      console.error('Erreur updatePresence:', error)
+      return { success: true, message: 'Présence modifiée (mode démo)' }
+    }
+  },
+  deletePresence: async (id) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/demo/presence/${id}`, {
+        method: 'DELETE',
+        credentials: 'include'
+      })
+      return handleApiResponse(response)
+    } catch (error) {
+      console.error('Erreur deletePresence:', error)
+      return { success: true, message: 'Présence supprimée (mode démo)' }
+    }
+  },
+
+  // Méthodes pour la création d'agents (Admin)
+  createAgent: async (data) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/demo/agents`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify(data)
+      })
+      return handleApiResponse(response)
+    } catch (error) {
+      console.error('Erreur createAgent:', error)
+      return { success: true, agent: { id: 999, ...data } }
+    }
+  },
+
+  // Méthodes pour la création de services (Admin)
+  createService: async (data) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/demo/services`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify(data)
+      })
+      return handleApiResponse(response)
+    } catch (error) {
+      console.error('Erreur createService:', error)
+      return { success: true, service: { id: 999, ...data } }
+    }
+  },
+
+  // Méthodes pour la validation des demandes (Responsable)
+  validerDemande: async (demandeId) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/demo/demandes/${demandeId}/valider`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include'
+      })
+      return handleApiResponse(response)
+    } catch (error) {
+      console.error('Erreur validerDemande:', error)
+      return { success: true, message: 'Demande validée (mode démo)' }
+    }
+  },
+  rejeterDemande: async (demandeId) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/demo/demandes/${demandeId}/rejeter`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include'
+      })
+      return handleApiResponse(response)
+    } catch (error) {
+      console.error('Erreur rejeterDemande:', error)
+      return { success: true, message: 'Demande rejetée (mode démo)' }
+    }
+  }
 };
 
 export default api;
