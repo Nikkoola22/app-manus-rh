@@ -137,83 +137,13 @@ export const api = {
   }),
 
   // Planning endpoints
-  getPlanningAgent: (agentId) => {
-    if (DEMO_MODE) {
-      // Retourner le planning stocké ou un planning par défaut
-      const planning = demoPlannings[agentId] || {
-        0: { // Lundi
-          plannings: [{ heure_debut: '08:00', heure_fin: '17:00', pause_debut: '12:00', pause_fin: '13:00' }],
-          creneaux: []
-        },
-        1: { // Mardi
-          plannings: [{ heure_debut: '08:00', heure_fin: '17:00', pause_debut: '12:00', pause_fin: '13:00' }],
-          creneaux: []
-        },
-        2: { // Mercredi
-          plannings: [{ heure_debut: '08:00', heure_fin: '11:30', pause_debut: null, pause_fin: null }],
-          creneaux: []
-        },
-        3: { // Jeudi
-          plannings: [{ heure_debut: '08:00', heure_fin: '17:00', pause_debut: '12:00', pause_fin: '13:00' }],
-          creneaux: []
-        },
-        4: { // Vendredi
-          plannings: [{ heure_debut: '08:00', heure_fin: '17:00', pause_debut: '12:00', pause_fin: '13:00' }],
-          creneaux: []
-        }
-      }
-      
-      // Générer les créneaux pour chaque jour
-      const planningAvecCreneaux = {}
-      Object.keys(planning).forEach(jour => {
-        const jourData = planning[jour]
-        if (jourData.plannings && jourData.plannings.length > 0) {
-          const planningData = jourData.plannings[0]
-          const creneaux = generateCreneaux(
-            planningData.heure_debut,
-            planningData.heure_fin,
-            planningData.pause_debut,
-            planningData.pause_fin
-          )
-          planningAvecCreneaux[jour] = {
-            ...jourData,
-            creneaux: creneaux
-          }
-        } else {
-          planningAvecCreneaux[jour] = jourData
-        }
-      })
-      
-      return mockResponse({ planning: planningAvecCreneaux })
-    }
-    return fetch(`${API_BASE_URL}/planning/agent/${agentId}`, { credentials: 'include' })
-  },
-  savePlanningAgent: (agentId, data) => {
-    if (DEMO_MODE) {
-      // Sauvegarder le planning dans le stockage local
-      if (data.plannings) {
-        demoPlannings[agentId] = {}
-        data.plannings.forEach(planning => {
-          demoPlannings[agentId][planning.jour_semaine] = {
-            plannings: [{
-              heure_debut: planning.heure_debut,
-              heure_fin: planning.heure_fin,
-              pause_debut: planning.pause_debut,
-              pause_fin: planning.pause_fin
-            }],
-            creneaux: []
-          }
-        })
-      }
-      return mockResponse({ success: true })
-    }
-    return fetch(`${API_BASE_URL}/planning/agent/${agentId}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      credentials: 'include',
-      body: JSON.stringify(data)
-    })
-  },
+  getPlanningAgent: (agentId) => fetch(`${API_BASE_URL}/demo/planning/${agentId}`, { credentials: 'include' }),
+  savePlanningAgent: (agentId, data) => fetch(`${API_BASE_URL}/demo/planning/${agentId}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    credentials: 'include',
+    body: JSON.stringify(data)
+  }),
   updatePlanningAgent: (agentId, data) => DEMO_MODE ? mockResponse({ success: true }) : fetch(`${API_BASE_URL}/planning/agent/${agentId}`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
@@ -222,73 +152,8 @@ export const api = {
   }),
 
   // Presence endpoints
-  getPresenceCalendrier: (semaine) => {
-    if (DEMO_MODE) {
-      // Données de démonstration pour le calendrier
-      const demoCalendrier = [
-        {
-          id: 1,
-          agent_id: 1,
-          agent_nom: 'Jean Dupont',
-          date_presence: '2024-01-15',
-          creneau: 'matin',
-          statut: 'present',
-          heure_debut: '08:00',
-          heure_fin: '12:00',
-          motif: ''
-        },
-        {
-          id: 2,
-          agent_id: 1,
-          agent_nom: 'Jean Dupont',
-          date_presence: '2024-01-15',
-          creneau: 'apres_midi',
-          statut: 'present',
-          heure_debut: '13:00',
-          heure_fin: '17:00',
-          motif: ''
-        },
-        {
-          id: 3,
-          agent_id: 2,
-          agent_nom: 'Marie Martin',
-          date_presence: '2024-01-15',
-          creneau: 'matin',
-          statut: 'present',
-          heure_debut: '08:30',
-          heure_fin: '12:30',
-          motif: ''
-        },
-        {
-          id: 4,
-          agent_id: 3,
-          agent_nom: 'Pierre Bernard',
-          date_presence: '2024-01-16',
-          creneau: 'matin',
-          statut: 'absent',
-          heure_debut: null,
-          heure_fin: null,
-          motif: 'Congé maladie'
-        }
-      ]
-      return mockResponse(demoCalendrier)
-    }
-    return fetch(`${API_BASE_URL}/presence/calendrier/semaine/${semaine}`, { credentials: 'include' })
-  },
-  getPresenceStatistiques: (semaine) => {
-    if (DEMO_MODE) {
-      // Statistiques de démonstration
-      const demoStatistiques = {
-        total_agents: 3,
-        presents: 2,
-        absents: 1,
-        retards: 0,
-        taux_presence: 66.7
-      }
-      return mockResponse(demoStatistiques)
-    }
-    return fetch(`${API_BASE_URL}/presence/statistiques/semaine/${semaine}`, { credentials: 'include' })
-  },
+  getPresenceCalendrier: (semaine) => fetch(`${API_BASE_URL}/demo/presence/calendrier/${semaine}`, { credentials: 'include' }),
+  getPresenceStatistiques: (semaine) => fetch(`${API_BASE_URL}/demo/presence/statistiques/${semaine}`, { credentials: 'include' }),
   createPresence: (data) => DEMO_MODE ? mockResponse({ success: true }) : fetch(`${API_BASE_URL}/presence`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },

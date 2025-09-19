@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Connexion Vercel - Render</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test { margin: 10px 0; padding: 10px; border: 1px solid #ccc; }
+        .success { background-color: #d4edda; border-color: #c3e6cb; }
+        .error { background-color: #f8d7da; border-color: #f5c6cb; }
+        button { padding: 10px 20px; margin: 5px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h1>Test Connexion Vercel - API Render</h1>
+    
+    <div class="test" id="test1">
+        <h3>Test 1: Check Session</h3>
+        <button onclick="testCheckSession()">Tester</button>
+        <div id="result1"></div>
+    </div>
+    
+    <div class="test" id="test2">
+        <h3>Test 2: Login Simplifié</h3>
+        <button onclick="testLogin()">Tester</button>
+        <div id="result2"></div>
+    </div>
+    
+    <div class="test" id="test3">
+        <h3>Test 3: Récupérer Agents</h3>
+        <button onclick="testAgents()">Tester</button>
+        <div id="result3"></div>
+    </div>
+    
+    <div class="test" id="test4">
+        <h3>Test 4: Récupérer Services</h3>
+        <button onclick="testServices()">Tester</button>
+        <div id="result4"></div>
+    </div>
+
+    <script>
+        const API_BASE_URL = 'https://app-manus-rh-api.onrender.com/api';
+        
+        async function testCheckSession() {
+            const resultDiv = document.getElementById('result1');
+            const testDiv = document.getElementById('test1');
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/auth/check-session`, {
+                    method: 'GET',
+                    credentials: 'include',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                const data = await response.json();
+                resultDiv.innerHTML = `<strong>Réponse:</strong> ${JSON.stringify(data)}`;
+                testDiv.className = 'test success';
+            } catch (error) {
+                resultDiv.innerHTML = `<strong>Erreur:</strong> ${error.message}`;
+                testDiv.className = 'test error';
+            }
+        }
+        
+        async function testLogin() {
+            const resultDiv = document.getElementById('result2');
+            const testDiv = document.getElementById('test2');
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/auth/login`, {
+                    method: 'POST',
+                    credentials: 'include',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        nom: 'Jean Dupont',
+                        role: 'Agent'
+                    })
+                });
+                
+                const data = await response.json();
+                resultDiv.innerHTML = `<strong>Réponse:</strong> ${JSON.stringify(data)}`;
+                testDiv.className = 'test success';
+            } catch (error) {
+                resultDiv.innerHTML = `<strong>Erreur:</strong> ${error.message}`;
+                testDiv.className = 'test error';
+            }
+        }
+        
+        async function testAgents() {
+            const resultDiv = document.getElementById('result3');
+            const testDiv = document.getElementById('test3');
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/demo/agents`, {
+                    method: 'GET',
+                    credentials: 'include',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                const data = await response.json();
+                resultDiv.innerHTML = `<strong>Réponse:</strong> ${JSON.stringify(data)}`;
+                testDiv.className = 'test success';
+            } catch (error) {
+                resultDiv.innerHTML = `<strong>Erreur:</strong> ${error.message}`;
+                testDiv.className = 'test error';
+            }
+        }
+        
+        async function testServices() {
+            const resultDiv = document.getElementById('result4');
+            const testDiv = document.getElementById('test4');
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/demo/services`, {
+                    method: 'GET',
+                    credentials: 'include',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                const data = await response.json();
+                resultDiv.innerHTML = `<strong>Réponse:</strong> ${JSON.stringify(data)}`;
+                testDiv.className = 'test success';
+            } catch (error) {
+                resultDiv.innerHTML = `<strong>Erreur:</strong> ${error.message}`;
+                testDiv.className = 'test error';
+            }
+        }
+    </script>
+</body>
+</html>

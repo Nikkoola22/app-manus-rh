@@ -275,3 +275,100 @@ def get_demo_arrets_maladie():
     ]
     return jsonify(demo_arrets), 200
 
+@agents_bp.route('/demo/planning/<int:agent_id>', methods=['GET'])
+def get_demo_planning(agent_id):
+    """Route de démonstration pour récupérer le planning d'un agent"""
+    demo_planning = {
+        'planning': {
+            0: { # Lundi
+                'plannings': [{'heure_debut': '08:00', 'heure_fin': '17:00', 'pause_debut': '12:00', 'pause_fin': '13:00'}],
+                'creneaux': []
+            },
+            1: { # Mardi
+                'plannings': [{'heure_debut': '08:00', 'heure_fin': '17:00', 'pause_debut': '12:00', 'pause_fin': '13:00'}],
+                'creneaux': []
+            },
+            2: { # Mercredi
+                'plannings': [{'heure_debut': '08:00', 'heure_fin': '11:30', 'pause_debut': None, 'pause_fin': None}],
+                'creneaux': []
+            },
+            3: { # Jeudi
+                'plannings': [{'heure_debut': '08:00', 'heure_fin': '17:00', 'pause_debut': '12:00', 'pause_fin': '13:00'}],
+                'creneaux': []
+            },
+            4: { # Vendredi
+                'plannings': [{'heure_debut': '08:00', 'heure_fin': '17:00', 'pause_debut': '12:00', 'pause_fin': '13:00'}],
+                'creneaux': []
+            }
+        }
+    }
+    return jsonify(demo_planning), 200
+
+@agents_bp.route('/demo/planning/<int:agent_id>', methods=['POST'])
+def save_demo_planning(agent_id):
+    """Route de démonstration pour sauvegarder le planning d'un agent"""
+    return jsonify({'success': True, 'message': 'Planning sauvegardé avec succès'}), 200
+
+@agents_bp.route('/demo/presence/calendrier/<semaine>', methods=['GET'])
+def get_demo_presence_calendrier(semaine):
+    """Route de démonstration pour récupérer le calendrier de présence"""
+    demo_calendrier = [
+        {
+            'id': 1,
+            'agent_id': 1,
+            'agent_nom': 'Jean Dupont',
+            'date_presence': '2024-01-15',
+            'creneau': 'matin',
+            'statut': 'present',
+            'heure_debut': '08:00',
+            'heure_fin': '12:00',
+            'motif': ''
+        },
+        {
+            'id': 2,
+            'agent_id': 1,
+            'agent_nom': 'Jean Dupont',
+            'date_presence': '2024-01-15',
+            'creneau': 'apres_midi',
+            'statut': 'present',
+            'heure_debut': '13:00',
+            'heure_fin': '17:00',
+            'motif': ''
+        },
+        {
+            'id': 3,
+            'agent_id': 2,
+            'agent_nom': 'Marie Martin',
+            'date_presence': '2024-01-15',
+            'creneau': 'matin',
+            'statut': 'present',
+            'heure_debut': '08:30',
+            'heure_fin': '12:30',
+            'motif': ''
+        },
+        {
+            'id': 4,
+            'agent_id': 3,
+            'agent_nom': 'Pierre Bernard',
+            'date_presence': '2024-01-16',
+            'creneau': 'matin',
+            'statut': 'absent',
+            'heure_debut': None,
+            'heure_fin': None,
+            'motif': 'Congé maladie'
+        }
+    ]
+    return jsonify(demo_calendrier), 200
+
+@agents_bp.route('/demo/presence/statistiques/<semaine>', methods=['GET'])
+def get_demo_presence_statistiques(semaine):
+    """Route de démonstration pour récupérer les statistiques de présence"""
+    demo_statistiques = {
+        'total_agents': 3,
+        'presents': 2,
+        'absents': 1,
+        'retards': 0,
+        'taux_presence': 66.7
+    }
+    return jsonify(demo_statistiques), 200
+
