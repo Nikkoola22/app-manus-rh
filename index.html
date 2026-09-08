@@ -34,10 +34,15 @@
         .banner { 
             width: 100%; 
             border-radius: 8px; 
-            margin-bottom: 30px; 
             display: block;
         }
+        .form-row {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
         .form-group { 
+            flex: 1;
             margin-bottom: 20px; 
         }
         label { 
@@ -119,6 +124,16 @@
             display: block;
             margin-top: 10px;
         }
+        .result-details {
+            font-size: 14px;
+            color: #555;
+            margin-top: 15px;
+            text-align: left;
+            background: #fff;
+            padding: 10px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+        }
         .rules { 
             margin-top: 40px; 
             font-size: 15px; 
@@ -141,13 +156,17 @@
             margin-bottom: 10px;
         }
         @media (max-width: 600px) {
-            .child-row {
+            .child-row, .form-row {
                 flex-direction: column;
                 align-items: flex-start;
+                gap: 0;
             }
             .child-row input {
                 margin-left: 0;
                 margin-top: 5px;
+            }
+            .form-group {
+                width: 100%;
             }
         }
     </style>
@@ -161,19 +180,33 @@
 
         <h1>Calculateur du SFT</h1>
         <p style="text-align: center; color: #555; margin-bottom: 30px;">
-            Simulez facilement le montant de votre Supplément Familial de Traitement.
+            Simulez facilement le montant de votre Supplément Familial de Traitement (à jour des montants plancher/plafond 454-722).
         </p>
 
         <form id="sftForm" onsubmit="event.preventDefault(); calculateSFT();">
-            <div class="form-group">
-                <label for="im">Indice Majoré (IM) - Optionnel</label>
-                <input type="number" id="im" min="0" placeholder="Ex: 400">
-                <span class="note">Laissez vide pour afficher le montant minimum garanti (plancher). Votre IM est visible sur votre fiche de paie.</span>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="im">Indice Majoré (IM)</label>
+                    <input type="number" id="im" min="0" placeholder="Ex: 436">
+                    <span class="note">Laissez vide pour afficher le montant minimum garanti (IM 454).</span>
+                </div>
+                <div class="form-group">
+                    <label for="nbi">NBI (en points)</label>
+                    <input type="number" id="nbi" min="0" value="0">
+                    <span class="note">Nouvelle Bonification Indiciaire éventuelle.</span>
+                </div>
             </div>
 
-            <div class="form-group">
-                <label for="numChildren">Nombre d'enfants au foyer</label>
-                <input type="number" id="numChildren" min="0" max="15" value="0" onchange="generateFields()" onkeyup="generateFields()">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="temps">Temps de travail (%)</label>
+                    <input type="number" id="temps" min="1" max="100" value="100">
+                    <span class="note">Saisir 100 pour un temps plein.</span>
+                </div>
+                <div class="form-group">
+                    <label for="numChildren">Nombre d'enfants à charge</label>
+                    <input type="number" id="numChildren" min="0" max="15" value="0" onchange="generateFields()" onkeyup="generateFields()">
+                </div>
             </div>
 
             <div id="childrenDatesContainer"></div>
@@ -188,10 +221,11 @@
             <ul>
                 <li><strong>Bénéficiaires :</strong> Le SFT est versé à tout agent public ayant au moins un enfant à charge (au sens des prestations familiales).</li>
                 <li><strong>Condition d'âge :</strong> L'enfant doit être âgé de <strong>moins de 20 ans</strong>.</li>
-                <li><strong>Non-cumul :</strong> Si les deux parents sont fonctionnaires ou agents publics, le SFT n'est versé qu'à <strong>un seul</strong> des deux parents (selon leur choix). Il est conseillé de choisir le parent ayant l'Indice Majoré le plus élevé.</li>
-                <li><strong>Garde alternée :</strong> En cas de séparation avec garde alternée, le montant du SFT peut être partagé entre les deux parents, sur demande.</li>
-                <li><strong>Calcul :</strong> Le SFT comprend un élément fixe (dès 1 enfant) et un élément proportionnel au traitement indiciaire brut (à partir de 2 enfants). Des montants planchers (minimum garanti) et plafonds s'appliquent.</li>
-                <li><strong>Cotisations :</strong> Le montant du SFT affiché est brut. Il est soumis à certaines retenues (CSG, CRDS, RAFP).</li>
+                <li><strong>Traitement pris en compte :</strong> C'est l'Indice Majoré (IM) + la Nouvelle Bonification Indiciaire (NBI).</li>
+                <li><strong>Calcul et Encadrement :</strong> Le SFT comprend un élément fixe et un élément proportionnel (à partir de 2 enfants). 
+                    Le montant est encadré par un <strong>plancher</strong> (correspondant à l'indice majoré 454) et un <strong>plafond</strong> (correspondant à l'indice 722).</li>
+                <li><strong>Temps partiel :</strong> En cas de temps partiel ou non complet, le SFT est réduit proportionnellement, mais <strong>il ne peut jamais être inférieur au SFT minimum d'un agent à temps plein</strong> (sauf pour 1 enfant où la part fixe de 2,29€ n'est de toute façon jamais réduite).</li>
+                <li><strong>Non-cumul :</strong> Si les deux parents sont agents publics, le SFT n'est versé qu'à un seul des deux (choisissez l'Indice Majoré le plus élevé). En cas de garde alternée, il peut être partagé.</li>
             </ul>
         </div>
 
@@ -204,9 +238,8 @@
             const numChildren = parseInt(document.getElementById('numChildren').value) || 0;
             const container = document.getElementById('childrenDatesContainer');
             
-            // On conserve les valeurs déjà saisies si le nombre d'enfants change
             const existingValues = [];
-            for (let i = 1; i <= container.children.length - 1; i++) { // -1 car il y a le h3
+            for (let i = 1; i <= container.children.length - 1; i++) {
                 const input = document.getElementById(`child${i}`);
                 if (input) existingValues.push(input.value);
             }
@@ -228,12 +261,16 @@
             }
         }
 
+        // Fonction pour tronquer à 2 décimales (ignorer les millièmes)
+        function trunc(val) {
+            return Math.floor(val * 100) / 100;
+        }
+
         function calculateSFT() {
             const numChildren = parseInt(document.getElementById('numChildren').value) || 0;
             let eligibleChildren = 0;
             const today = new Date();
             
-            // Vérification de l'âge de chaque enfant
             for (let i = 1; i <= numChildren; i++) {
                 const dateInput = document.getElementById(`child${i}`).value;
                 if (dateInput) {
@@ -249,49 +286,94 @@
                 }
             }
             
-            let im = parseFloat(document.getElementById('im').value) || 0;
-            const pointIndice = 4.92278; // Valeur du point d'indice (2023/2026)
-            const tib = im * pointIndice;
+            const im = parseFloat(document.getElementById('im').value) || 0;
+            const nbi = parseFloat(document.getElementById('nbi').value) || 0;
+            const tempsTravail = parseFloat(document.getElementById('temps').value) || 100;
+            const ratioTemps = tempsTravail / 100;
+
+            let im_calc = im + nbi;
+            let assumedMinimum = false;
             
+            // Si pas d'IM ou IM < 454, on simule avec 454 (taux minimum)
+            if (im_calc < 454 || im === 0) {
+                im_calc = 454;
+                if (im === 0) assumedMinimum = true;
+            }
+            // Plafond à 722
+            if (im_calc > 722) {
+                im_calc = 722;
+            }
+
+            // Calcul du Traitement Indiciaire Brut (TIB) au prorata du temps de travail
+            const TIB_full = im_calc * 5907.34 / 1200;
+            const TIB_partiel = TIB_full * ratioTemps;
+
             let sft = 0;
-            let isMinimum = false;
+            let details = "";
             
+            // Calculs plancher "Temps plein" garantis pour tout agent (Même à temps partiel)
+            let sft_min_absolu = 0;
+            if (eligibleChildren === 1) sft_min_absolu = 2.29;
+            else if (eligibleChildren === 2) sft_min_absolu = 77.71;
+            else if (eligibleChildren === 3) sft_min_absolu = 194.03;
+            else if (eligibleChildren > 3) sft_min_absolu = 194.03 + (eligibleChildren - 3) * 138.66;
+
             if (eligibleChildren === 0) {
                 sft = 0;
             } else if (eligibleChildren === 1) {
-                sft = 2.29; // Montant fixe
+                sft = 2.29; // Pas réduit par le temps de travail
             } else if (eligibleChildren === 2) {
-                sft = 10.67 + 0.03 * tib;
-                if (sft < 73.04 || im === 0) { sft = 73.04; isMinimum = true; }
-                if (sft > 110.27) sft = 110.27;
+                let p_fixe = trunc(10.67 * ratioTemps);
+                let p_prop = trunc(TIB_partiel * 0.03);
+                sft = p_fixe + p_prop;
+                details = `Part fixe (proratisée) : ${p_fixe.toFixed(2)} €<br>Part proportionnelle (3%) : ${p_prop.toFixed(2)} €`;
             } else if (eligibleChildren === 3) {
-                sft = 15.24 + 0.08 * tib;
-                if (sft < 181.56 || im === 0) { sft = 181.56; isMinimum = true; }
-                if (sft > 279.46) sft = 279.46;
+                let p_fixe = trunc(15.24 * ratioTemps);
+                let p_prop = trunc(TIB_partiel * 0.08);
+                sft = p_fixe + p_prop;
+                details = `Part fixe (proratisée) : ${p_fixe.toFixed(2)} €<br>Part proportionnelle (8%) : ${p_prop.toFixed(2)} €`;
             } else {
-                // Base pour 3 enfants
-                let base3 = 15.24 + 0.08 * tib;
-                if (base3 < 181.56 || im === 0) { base3 = 181.56; }
-                if (base3 > 279.46) { base3 = 279.46; }
+                let p_fixe_3 = trunc(15.24 * ratioTemps);
+                let p_prop_3 = trunc(TIB_partiel * 0.08);
+                let extra_fixe = trunc(4.57 * ratioTemps);
+                let extra_prop = trunc(TIB_partiel * 0.06);
                 
-                // Majoration par enfant supplémentaire
-                let extra = 4.57 + 0.06 * tib;
-                if (extra < 129.31 || im === 0) { extra = 129.31; isMinimum = true; }
-                if (extra > 196.22) { extra = 196.22; }
+                let extra_count = eligibleChildren - 3;
+                sft = p_fixe_3 + p_prop_3 + (extra_count * (extra_fixe + extra_prop));
                 
-                sft = base3 + (eligibleChildren - 3) * extra;
+                details = `Base 3 enfants : ${(p_fixe_3 + p_prop_3).toFixed(2)} €<br>
+                           Par enfant supp. (${extra_count}) : ${(extra_fixe + extra_prop).toFixed(2)} € x ${extra_count}`;
+            }
+            
+            // Le SFT d'un agent à temps partiel ne peut être inférieur au minimum de l'agent à temps plein
+            let appliedMin = false;
+            if (sft < sft_min_absolu && eligibleChildren >= 2) {
+                sft = sft_min_absolu;
+                appliedMin = true;
             }
             
             const resultDiv = document.getElementById('result');
             resultDiv.style.display = 'block';
             
             let message = `<strong>Enfants éligibles (-20 ans) : ${eligibleChildren} sur ${numChildren}</strong><br>`;
-            message += `Montant estimé de votre SFT : <span class="result-amount">${sft.toFixed(2).replace('.', ',')} € / mois (Brut)</span>`;
+            message += `Montant de votre SFT : <span class="result-amount">${sft.toFixed(2).replace('.', ',')} € / mois (Brut)</span>`;
             
-            if (eligibleChildren >= 2 && im === 0) {
+            if (details) {
+                message += `<div class="result-details">${details}</div>`;
+            }
+            
+            if (appliedMin && !assumedMinimum) {
+                message += `<br><span style="font-size: 14px; color: #d32f2f; display: block; margin-top: 10px;">
+                    <strong>Application du plancher garanti</strong> : Votre calcul initial était inférieur au minimum absolu temps plein (${sft_min_absolu.toFixed(2)} €). C'est ce minimum légal qui vous est versé.
+                </span>`;
+            } else if (assumedMinimum && eligibleChildren >= 2) {
                 message += `<br><span style="font-size: 14px; color: #666; display: block; margin-top: 10px;">
-                    Ce montant correspond au <strong>plancher (minimum garanti)</strong>.<br> 
-                    Pour un calcul exact basé sur votre salaire, veuillez renseigner votre Indice Majoré (IM).
+                    Ce montant correspond au <strong>plancher (minimum garanti)</strong> calculé sur l'indice 454.<br> 
+                    Pour un calcul exact, renseignez votre Indice Majoré (IM).
+                </span>`;
+            } else if (im_calc === 722 && (im+nbi) > 722) {
+                message += `<br><span style="font-size: 14px; color: #ff9800; display: block; margin-top: 10px;">
+                    <strong>Application du plafond</strong> : Votre indice majoré dépassant 722, votre SFT est calculé sur la base de l'indice 722 maximum.
                 </span>`;
             }
             
